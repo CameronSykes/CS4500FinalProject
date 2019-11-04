@@ -1,11 +1,11 @@
 //Name: Khalfani Wadlington
 //Date: [2019-10-30 Wed]
-//Purpose: Make binary search tree
+//Purpose: Create Binary Search Tree becuase it is easier to create and
+//manipulate if we put number in the nodes.
 
-
-//Create Binary Search Tree becuase it is easier to create and manipulate if we
-//put number in the nodes.
-class BinarySearchTree 
+//use "export default" so the class can be referenced in another js file
+//See https://stackoverflow.com/questions/6998355/including-javascript-class-definition-from-another-file-in-node-js
+export default class BinarySearchTree
 { 
     constructor() 
     { 
@@ -55,15 +55,45 @@ class BinarySearchTree
     // Helper function 
     // findMinNode() 
     // getRootNode() 
-    // inorder(node) 
-    // preorder(node)                
-    // postorder(node) 
-    // search(node, data) 
+
+    //returns a array of nodes from inorder traversal
+    getNodesInOrder(node) {
+        // Traversal algorithm inspired by
+        // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+        
+        var currentNode = this.root;
+        var stack = [];
+        var nodeArray = [];
+        while (currentNode != null || stack.length != 0){
+            if (currentNode != null) {
+                // add all leftmost nodes
+                stack.push(currentNode);
+                currentNode = currentNode.leftChild;
+            }
+            else if (stack.length != 0) {
+                currentNode = stack.pop();
+                nodeArray.push(currentNode);
+                
+                /*
+                  This loop pushes the bottom leftmost node to array.
+
+                  Then it goes to the right node. However, when the right node
+                  is null (at the bottom of the tree) it will pop the stack and
+                  work on the root. The root has a right child. Therefore the
+                  loop will work on the right child. The traversal will follow
+                  the pattern "left,root,right"
+                */
+                currentNode = currentNode.rightChild;
+            }
+        }
+        return(nodeArray);
+    }
+    // preorder(node)
+    // postorder(node)
+    // search(node, data)
 }
 // this is an object becuase it's going to have more properites later on
-// It should be inside Binary tree to reduce coupling
-
-
+//its a part of Binary Search Tree object
 class Node
 { 
     constructor(inputContent) 
@@ -93,14 +123,12 @@ class Node
 
 
 
-var MainTree = new BinarySearchTree();
-
-MainTree.insert(8);
-MainTree.insert(3);
-MainTree.insert(1);
-MainTree.insert(10);
-MainTree.insert(14);
-console.log(MainTree);
-console.log(MainTree.root.rightChild);
-console.log(MainTree.root.leftChild);
-
+// Test if it works
+// var MainTree                       = new BinarySearchTree();
+// MainTree.root                      = new Node(1); 
+// MainTree.root.leftChild            = new Node(2); 
+// MainTree.root.rightChild           = new Node(3); 
+// MainTree.root.leftChild.leftChild  = new Node(4); 
+// MainTree.root.leftChild.rightChild = new Node(5); 
+// console.log("TREE");
+// console.log(MainTree.getNodesInOrder());
