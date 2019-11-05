@@ -1,6 +1,5 @@
 //Purpose Makes scene that animates traversal of binary tree
 // this refers to this Scene/Level
-// Started 6:30
 
 class Scene1 extends Phaser.Scene {
     constructor () {
@@ -22,12 +21,12 @@ class Scene1 extends Phaser.Scene {
         //This is hard coded
         //TODO make this dynamic
         var nodePositionArray = [
-                              [0,300],
-                              [300,300],
-                              [200,500],
-                              [300,300],
-                              [600,600],
-                              [100,600]
+                              [370,30],
+                              [310,130],
+                              [430,130],
+                              [250,230],
+                              [370,230],
+                              [490,230]
                              ];
         this.CaveImageArray = [];
 
@@ -51,7 +50,7 @@ class Scene1 extends Phaser.Scene {
         for (var i = 0; i < nodePositionArray.length; i++) {
             var tweenBuilderConfig = {
                 targets: player,
-                duration: 3000,
+                duration: 1000,
                 x : nodePositionArray[i][0],
                 y : nodePositionArray[i][1]
             };
