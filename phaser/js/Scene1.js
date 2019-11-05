@@ -11,7 +11,7 @@ class Scene1 extends Phaser.Scene {
     preload () {
         //the directory is relative to the index.html file or whichever html
         //file that Scene1 is loaded from
-        var imageDir = "/assets/images/";
+        var imageDir = "./assets/images/";
         this.load.image("cave",imageDir+"cave.png");
         this.load.image("person",imageDir+"person.png");
     }
@@ -23,11 +23,11 @@ class Scene1 extends Phaser.Scene {
         //TODO make this dynamic
         var nodePositionArray = [
                               [0,300],
-                              [100,300],
-                              [200,300],
                               [300,300],
-                              [400,300],
-                              [500,300]
+                              [200,500],
+                              [300,300],
+                              [600,600],
+                              [100,600]
                              ];
         this.CaveImageArray = [];
 
@@ -47,7 +47,7 @@ class Scene1 extends Phaser.Scene {
         //Timeline is a series of tweens
         var playerAnimationTimeline = this.tweens.createTimeline();
 
-        //set th
+        //animate it moving from one node to another
         for (var i = 0; i < nodePositionArray.length; i++) {
             var tweenBuilderConfig = {
                 targets: player,
@@ -61,20 +61,6 @@ class Scene1 extends Phaser.Scene {
         //run all tween animations
         playerAnimationTimeline.play();
 
-        //         player.to(nodePositionArray[i][0],
-        //             nodePositionArray[i][1]);
-
-        // playerAnimationTimeline.addTween(c)
-        // //move image
-        // var movementRange = this.tweens.add(
-        //     {
-        //         targets: this.CaveImage,
-        //         x:200,
-        //         y:250,
-        //         delay:1000,
-        //         duration:2000
-        //     }
-        // );
     }
     update(time, delta) {}
  
