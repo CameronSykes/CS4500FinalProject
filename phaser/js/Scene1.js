@@ -1,4 +1,5 @@
 //Purpose Makes scene that animates traversal of binary tree
+// this refers to this Scene/Level
 // Started 6:30
 
 class Scene1 extends Phaser.Scene {
@@ -33,6 +34,7 @@ class Scene1 extends Phaser.Scene {
         //elements such as enemies or obstacles are stored as groups
         https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
         var caveGroup = this.add.group();
+        //create a series of caves in the node positions
         for (var i = 0; i < nodePositionArray.length; i++) {
             caveGroup.create(
                 nodePositionArray[i][0],
@@ -40,6 +42,29 @@ class Scene1 extends Phaser.Scene {
                 'cave');
         }
 
+        var player = this.add.sprite(0, 0, 'person');
+        //a tween is an animation of a sprite moving between 2 positons a
+        //Timeline is a series of tweens
+        var playerAnimationTimeline = this.tweens.createTimeline();
+
+        //set th
+        for (var i = 0; i < nodePositionArray.length; i++) {
+            var tweenBuilderConfig = {
+                targets: player,
+                duration: 3000,
+                x : nodePositionArray[i][0],
+                y : nodePositionArray[i][1]
+            };
+            playerAnimationTimeline.add(tweenBuilderConfig);
+        }
+
+        //run all tween animations
+        playerAnimationTimeline.play();
+
+        //         player.to(nodePositionArray[i][0],
+        //             nodePositionArray[i][1]);
+
+        // playerAnimationTimeline.addTween(c)
         // //move image
         // var movementRange = this.tweens.add(
         //     {

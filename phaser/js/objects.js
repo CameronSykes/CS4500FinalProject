@@ -1,6 +1,6 @@
 var platform;
-var screenWidth = 1500;
-var screenHeight = 3000;
+var screenWidth = 800;
+var screenHeight = 600;
 var config =
     {
         type: Phaser.AUTO,

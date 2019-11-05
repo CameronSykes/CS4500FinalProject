@@ -3,9 +3,9 @@
 //Purpose: Create Binary Search Tree becuase it is easier to create and
 //manipulate if we put number in the nodes.
 
-//use "export default" so the class can be referenced in another js file
-//See https://stackoverflow.com/questions/6998355/including-javascript-class-definition-from-another-file-in-node-js
-export default class BinarySearchTree
+
+//TODO use @class directives to put this into make this importable  
+class BinarySearchTree
 { 
     constructor() 
     { 
