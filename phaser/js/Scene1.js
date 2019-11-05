@@ -3,22 +3,16 @@
 // Started 6:30
 
 class Scene1 extends Phaser.Scene {
-    constructor (config) {
+    constructor () {
         // call superclass (Phaser.Scene) constructor.
-        super(config);
+        super({key:"Scene1"});
     }
     init(data) {}
-    preload () {}
+    preload () {
+        this.load.image("../assets/images/cave.png");
+    }
     create (data)  {}
     update(time, delta) {}
-    //Do inorder traversal. Store each X,Y coordinate in in an array [X,Y].
-    //Store each nodes coordinates in an array
-    // [ [X,Y](root), [X,Y](node1), [X,Y](node2) ]
-    extractNodePositions(binaryTree,nodePositonArray){
-        binaryTree.root
-        if(){
-            
-        }
-    }
+
 
 }
