@@ -2,7 +2,7 @@
 
 to run use go to the directory containing index.html
 ```
-python -m http.server 8080
+python -m SimpleHTTPServer 9999
 ```
 If that doesn't work try if you are on Windows
 ```
