@@ -9,10 +9,25 @@ class Scene1 extends Phaser.Scene {
     }
     init(data) {}
     preload () {
-        this.load.image("../assets/images/cave.png");
+        // "../" means go up a directory
+        // the assets folder is in the directory above where this file is
+        //its called CAVE becuase its a constant
+        this.load.image("cave","/assets/images/cave.png");
     }
-    create (data)  {}
+    create ()  {
+        this.CaveImage = this.add.image(400,300,"cave");
+        //move image
+        var movementRange = this.tweens.add(
+            {
+                targets: this.CaveImage,
+                x:200,
+                y:250,
+                delay:1000,
+                duration:2000
+            }
+        );
+    }
     update(time, delta) {}
-
+ 
 
 }

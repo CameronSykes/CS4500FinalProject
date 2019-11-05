@@ -15,13 +15,17 @@ var config =
                         debug: false
                     }
             },
-        scene:
-            {
-                preload: preload,
-                create: create//,
-                // uncomment when we make the game interactive
-                // update: update
-            }
+        // scene:
+        //     {
+        //         preload: preload,
+        //         create: create//,
+        //         // uncomment when we make the game interactive
+        //         // update: update
+        //     }
+
+        //TODO move preload and create function to another file
+        //Make the program modular use preload create etc functions inanother file
+        scene: [ Scene1 ]
     };
 
 const game = new Phaser.Game(config);
@@ -38,7 +42,7 @@ function create()
 {
     caveWidth = 100;
     caveHeight = 100;
-    numNodes = 10 // 10 is for an example. The true value will be based on the BST
+    numNodes = 10;// 10 is for an example. The true value will be based on the BST
 
     // array of cave images
     // The size of the array is meant to be a safe size so all the caves can fit on the screen comfortably
@@ -47,22 +51,24 @@ function create()
     caveArr(10);
 
     // Height of BST is determined by lg(# of nodes)
-    treeHeight = Math.ceiling(Math.log2(numNodes)));
+    treeHeight = Math.ceiling(Math.log2(numNodes));
 
     // Space of te nodes vertically
     nodeSpace = screenHeight / treeHeight;
 
     // intent here is to create as many elements as needed
     // if we want 10 elements they all space out properly
-    for each(cave in caveArr)
-    {
-	    nodeSpace = screenHeight / treeHeight
-	    //nodeSpace = ((screenHeight - nodeSapce) / 2) / treeHeight
+    //TODO UNCOMMENT begin
+    // Had To Comment this out because my browser wasnt working
+    // for each(cave in caveArr)
+    // {
+	  //     nodeSpace = screenHeight / treeHeight;
+	  //   //nodeSpace = ((screenHeight - nodeSapce) / 2) / treeHeight
 
-    	startHeight = nodeSpace
-        this.add.image()
-    }
-
+    // 	  startHeight = nodeSpace;
+    //     this.add.image();
+    // }
+    //TODO UNCOMMENT end
     // cave array ele 1 .angle = 45 for a 45 deg rotation
     platform = this.physics.add.staticGroup();
     platform.create(0, 0, 'tunnel');
