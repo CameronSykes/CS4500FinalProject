@@ -11,7 +11,7 @@ class Scene1 extends Phaser.Scene {
     preload () {
         //the directory is relative to the index.html file or whichever html
         //file that Scene1 is loaded from
-        var imageDir = "/assets/images/";
+        var imageDir = "./assets/images/";
         this.load.image("cave",imageDir+"cave.png");
         this.load.image("person",imageDir+"person.png");
     }
