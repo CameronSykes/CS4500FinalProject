@@ -1,5 +1,4 @@
 #!/bash
-git add
-add a period
+git add --all
 git commit -m 
 git merge <currentBranch>
