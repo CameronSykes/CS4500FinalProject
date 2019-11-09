@@ -1,3 +1,5 @@
+import {BinarySearchTree, Node} from '/js/BST.js';
+
 class Scene1 extends Phaser.Scene
 {
     constructor()
@@ -19,9 +21,8 @@ class Scene1 extends Phaser.Scene
     {
         //the directory is relative to the index.html file or whichever html
         //file that Scene1 is loaded from
-        var imageDir = "./assets/images/";
-        this.load.image("cave",imageDir+"cave.png");
-        this.load.image("person",imageDir+"person.png");
+        this.load.image("cave", "images/cave.png");
+        this.load.image("person", "images/person.png");
     }
 
     create()
