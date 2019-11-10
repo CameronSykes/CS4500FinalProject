@@ -1,4 +1,3 @@
-//file locations are relative to game.js
 import BST from '../objects/BST.js';
 
 
