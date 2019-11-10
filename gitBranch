@@ -1,4 +1,4 @@
 #!/bash
 git add --all
-git commit -m 
+git commit --all
 git merge <currentBranch>
