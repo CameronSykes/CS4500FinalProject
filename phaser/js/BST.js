@@ -4,8 +4,7 @@
 //manipulate if we put number in the nodes.
 
 
-//TODO use @class directives to put this into make this importable  
-class BinarySearchTree
+export class BinarySearchTree
 { 
     constructor() 
     { 
@@ -94,7 +93,7 @@ class BinarySearchTree
 }
 // this is an object becuase it's going to have more properites later on
 //its a part of Binary Search Tree object
-class Node
+export class Node
 { 
     constructor(inputContent) 
     {
