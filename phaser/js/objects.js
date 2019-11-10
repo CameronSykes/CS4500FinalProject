@@ -2,6 +2,7 @@ var platform;
 var screenWidth = 800;
 var screenHeight = 600;
 var config =
+<<<<<<< HEAD
 {
     type: Phaser.AUTO,
     width: screenWidth,
@@ -15,6 +16,21 @@ var config =
             debug: false
         }
     },
+=======
+    {
+        type: Phaser.AUTO,
+        width: screenWidth,
+        height: screenHeight,
+        physics:
+            {
+                default: 'arcade',
+                arcade:
+                    {
+                        gravity: { y: 300 },
+                        debug: false
+                    }
+            },
+>>>>>>> 343665a236722125b3a66e6a87c294ef29c17524
         // scene:
         //     {
         //         preload: preload,
@@ -28,7 +44,14 @@ var config =
         scene: [ Scene1 ]
     };
 
+<<<<<<< HEAD
 const game = new Phaser.Game(config);
+=======
+
+window.addEventListener('load', () => {
+    const game = new Phaser.Game(config);
+})
+>>>>>>> 343665a236722125b3a66e6a87c294ef29c17524
 
 function preload()
 {
