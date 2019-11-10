@@ -4,6 +4,7 @@
 //manipulate if we put number in the nodes.
 
 
+<<<<<<< HEAD
 //TODO use @class directives to put this into make this importable
 class BinarySearchTree
 {
@@ -92,15 +93,85 @@ class BinarySearchTree
         {
             if (currentNode != null)
             {
+=======
+export class BinarySearchTree
+{ 
+    constructor() 
+    { 
+        // root of a binary seach tree starts off empty
+        this.root = null;
+    }
+
+    //implement recursive algorithm
+    insert(inputNodeValue) {
+
+        var nodeToInsert = new Node(inputNodeValue);
+
+        //if its the first time inserting a node make it the root
+        if(this.root == null){
+            this.root = nodeToInsert;
+        } 
+        else{
+            //start recursively searching for node to insert this new node under
+            //beggining at root
+            this.insertNode(this.root,nodeToInsert);
+        }
+    }
+
+    //Handle traversal down tree to find place to insert new node 
+    insertNode(curNode, inputNode) {
+
+        if(inputNode.content < curNode.content ){
+            // is there an empty space to insert it
+            if(curNode.leftChild == null){
+                curNode.leftChild = inputNode;
+            }
+            else{
+                //Try it again with the new node 
+                this.insertNode(curNode.leftChild,inputNode);
+            }
+        }
+        //
+        else if(curNode.rightChild == null){
+                curNode.rightChild = inputNode;
+            }
+            else{
+                this.insertNode(curNode.rightChild,inputNode);
+            }
+        
+    }
+    
+    // Helper function 
+    // findMinNode() 
+    // getRootNode() 
+
+    //returns a array of nodes from inorder traversal
+    getNodesInOrder(node) {
+        // Traversal algorithm inspired by
+        // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+        
+        var currentNode = this.root;
+        var stack = [];
+        var nodeArray = [];
+        while (currentNode != null || stack.length != 0){
+            if (currentNode != null) {
+>>>>>>> 343665a236722125b3a66e6a87c294ef29c17524
                 // add all leftmost nodes
                 stack.push(currentNode);
                 currentNode = currentNode.leftChild;
             }
+<<<<<<< HEAD
             else if (stack.length != 0)
             {
                 currentNode = stack.pop();
                 nodeArray.push(currentNode);
 
+=======
+            else if (stack.length != 0) {
+                currentNode = stack.pop();
+                nodeArray.push(currentNode);
+                
+>>>>>>> 343665a236722125b3a66e6a87c294ef29c17524
                 /*
                   This loop pushes the bottom leftmost node to array.
 
@@ -117,6 +188,7 @@ class BinarySearchTree
     }
     // preorder(node)
     // postorder(node)
+<<<<<<< HEAD
 
     search(node, content)
     {
@@ -174,3 +246,47 @@ MainTree.root.leftChild.leftChild  = new Node(4);
 MainTree.root.leftChild.rightChild = new Node(5); 
 console.log("TREE");
 console.log(MainTree.getNodesInOrder());
+=======
+    // search(node, data)
+}
+// this is an object becuase it's going to have more properites later on
+//its a part of Binary Search Tree object
+export class Node
+{ 
+    constructor(inputContent) 
+    {
+        
+        // What could be diplayed in the tree  
+        this.content  = inputContent;
+        // Javascript does not have pointers 
+        // to make a node just do the node  Node.leftChild = new Node(X)
+        this.parentNode = null;
+        this.leftChild = null;
+        this.rightChild = null; 
+    }
+    
+    
+    // remove(data) 
+    
+    
+    // Helper function 
+    // findMinNode() 
+    // getRootNode() 
+    // inorder(node) 
+    // preorder(node)                
+    // postorder(node) 
+    // search(node, data) 
+} 
+
+
+
+// Test if it works
+// var MainTree                       = new BinarySearchTree();
+// MainTree.root                      = new Node(1); 
+// MainTree.root.leftChild            = new Node(2); 
+// MainTree.root.rightChild           = new Node(3); 
+// MainTree.root.leftChild.leftChild  = new Node(4); 
+// MainTree.root.leftChild.rightChild = new Node(5); 
+// console.log("TREE");
+// console.log(MainTree.getNodesInOrder());
+>>>>>>> 343665a236722125b3a66e6a87c294ef29c17524
