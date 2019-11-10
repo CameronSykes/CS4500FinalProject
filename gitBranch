@@ -1,4 +1,0 @@
-#!/bash
-git add --all
-git commit --all
-git merge <currentBranch>
