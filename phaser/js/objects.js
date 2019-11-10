@@ -28,7 +28,10 @@ var config =
         scene: [ Scene1 ]
     };
 
-const game = new Phaser.Game(config);
+
+window.addEventListener('load', () => {
+    const game = new Phaser.Game(config);
+})
 
 function preload()
 {

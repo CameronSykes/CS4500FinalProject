@@ -1,5 +1,5 @@
 //Purpose Makes scene that animates traversal of binary tree
-// this refers to this Scene/Level
+// "this." refers to this Scene/Level
 
 class Scene1 extends Phaser.Scene {
     constructor () {
