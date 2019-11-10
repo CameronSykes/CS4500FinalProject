@@ -1,4 +1,4 @@
-/node_modules
-/dist
-/.cache
-/.vscode
+phaser3-game/node_modules
+phaser3-game/dist
+phaser3-game/.cache
+phaser3-game/.vscode
