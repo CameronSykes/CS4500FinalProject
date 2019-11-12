@@ -1,8 +1,8 @@
 import BST from '../objects/BST.js';
+import { Person } from '../objects/Person.js';
 
 
-//Purpose Makes scene that animates traversal of binary tree
-// "this." refers to this Scene/Level
+//In my opinon a Scene brings everything together and that's it
 
 export default class Scene1 extends Phaser.Scene {
     constructor () {
@@ -10,6 +10,7 @@ export default class Scene1 extends Phaser.Scene {
         super({key:"Scene1"});
     }
     init(data) {}
+    //load assests used
     preload () {
         //the directory is relative to the index.html file or whichever html
         //file that Scene1 is loaded from
@@ -17,7 +18,17 @@ export default class Scene1 extends Phaser.Scene {
         this.load.image("cave",imageDir+"cave.png");
         this.load.image("person",imageDir+"person.png");
     }
+    //draw what will be used
     create ()  {
+
+        var personConfig = {
+            scene:this,
+            x:0,
+            y:0,
+            imageName:"person"
+        };
+        var player = new Person(personConfig);
+
         //Make list of images
         var nodeList = [];
 
@@ -33,8 +44,8 @@ export default class Scene1 extends Phaser.Scene {
                              ];
         this.CaveImageArray = [];
 
-        //elements such as enemies or obstacles are stored as groups
-        https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
+        //elements such as nodes on a tree are stored as groups
+        //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
         var caveGroup = this.add.group();
         //create a series of caves in the node positions
         for (var i = 0; i < nodePositionArray.length; i++) {
@@ -44,7 +55,6 @@ export default class Scene1 extends Phaser.Scene {
                 'cave');
         }
 
-        var player = this.add.sprite(0, 0, 'person');
         //a tween is an animation of a sprite moving between 2 positons a
         //Timeline is a series of tweens
         var playerAnimationTimeline = this.tweens.createTimeline();

@@ -1,3 +1,6 @@
+import { Node } from 'Node.js';
+
+
 //Name: Khalfani Wadlington
 //Date: [2019-10-30 Wed]
 //Purpose: Create Binary Search Tree becuase it is easier to create and
@@ -91,34 +94,6 @@ export class BinarySearchTree
     // postorder(node)
     // search(node, data)
 }
-// this is an object becuase it's going to have more properites later on
-//its a part of Binary Search Tree object
-export class Node
-{ 
-    constructor(inputContent) 
-    {
-        
-        // What could be diplayed in the tree  
-        this.content  = inputContent;
-        // Javascript does not have pointers 
-        // to make a node just do the node  Node.leftChild = new Node(X)
-        this.parentNode = null;
-        this.leftChild = null;
-        this.rightChild = null; 
-    }
-    
-    
-    // remove(data) 
-    
-    
-    // Helper function 
-    // findMinNode() 
-    // getRootNode() 
-    // inorder(node) 
-    // preorder(node)                
-    // postorder(node) 
-    // search(node, data) 
-} 
 
 
 
