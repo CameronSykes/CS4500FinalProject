@@ -1,4 +1,3 @@
-
 /*A cave is a visual representation of a Node. It will be shown on the screen.
 
 We cannot intitlaize the base Node class in a BST without giving it coordinates
