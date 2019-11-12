@@ -42,17 +42,21 @@ export default class Scene1 extends Phaser.Scene {
                               [370,230],
                               [490,230]
                              ];
-        this.CaveImageArray = [];
 
         //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
-        var caveGroup = this.add.group();
+        var nodeGroup = this.add.group();
+        
+        var curNode;
+        //create a series of caves sprites
         //create a series of caves in the node positions
         for (var i = 0; i < nodePositionArray.length; i++) {
-            caveGroup.create(
-                nodePositionArray[i][0],
-                nodePositionArray[i][1],
-                'cave');
+            curNode = new Node(this,
+                                nodePositionArray[i][0],
+                                nodePositionArray[i][1],
+                                'cave'
+                               );
+            nodeGroup.add(curNode);
         }
 
         //a tween is an animation of a sprite moving between 2 positons a

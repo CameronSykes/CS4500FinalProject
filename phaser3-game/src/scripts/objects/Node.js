@@ -1,12 +1,27 @@
-//This not is part of Binary Search Tree object
+
+import { Node } from './Node.js';
 //It will be shown on the screen
-export class Node
-{ 
-    constructor(inputContent) 
+//A cave is a visual representation of a Node
+//we cannot intitlaize the base Node class in a BST without giving it coordinates and a
+//scene so this is a class that will let nodes be manipulated viusally
+export class Cave extends Phaser.GameObjects.Sprite { 
+    
+    constructor(inputScene=0,
+                inputXCoord,
+                inputYCoord,
+                inputImageName,
+                inputContent)
     {
-        
-        // What could be diplayed in the tree  
-        this.content  = inputContent;
+        //TODO 
+       //initalize Sprite class 
+        super(inputScene,inputXCoord, inputYCoord,inputContent);
+
+        // What could be diplayed in the tree
+        this.content  =  inputContent;
+
+        this.xCoord = inputXCoord;
+        this.yCoord = inputYCoord;
+
         // Javascript does not have pointers 
         // to make a node just do the node  Node.leftChild = new Node(X)
         this.parentNode = null;
@@ -15,14 +30,5 @@ export class Node
     }
     
     
-    // remove(data) 
     
-    
-    // Helper function 
-    // findMinNode() 
-    // getRootNode() 
-    // inorder(node) 
-    // preorder(node)                
-    // postorder(node) 
-    // search(node, data) 
 } 
