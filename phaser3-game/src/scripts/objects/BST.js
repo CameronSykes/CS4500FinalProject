@@ -13,8 +13,8 @@ export class BinarySearchTree
     //implement recursive algorithm
     insert(inputNodeValue) {
 
-        var nodeToInsert = new Node(inputNodeValue);
 
+        var nodeToInsert = new Node(inputNodeValue);
         //if its the first time inserting a node make it the root
         if(this.root == null){
             this.root = nodeToInsert;

@@ -4,8 +4,7 @@
 
 export class Person extends Phaser.GameObjects.Sprite {
     //config is an object with properties we set before calling
-    constructor(config) {
-
+    constructor(scene, startingXPos, startingYPos, imageName) {
         /* This is thow we created the player as a sprite in the first iteration
 
          var player = this.add.sprite(0, 0, 'person');
@@ -16,13 +15,13 @@ export class Person extends Phaser.GameObjects.Sprite {
          and a string ("person") to refer to it
          
          This line initializes the sprite 
-         super(config.scene, config.x, config.y, "bomb");
         */
-        super(config.scene, config.x, config.y,config.imageName);
+        super(scene, startingXPos, startingYPos,imageName);
 
-        // show the sprite on the scene
-        alert(4);
-        config.scene.add.existing(this);
+        // show the sprite in the scene
+        scene.add.existing(this);
+        //use these var to change visual representation
+        this.hasBeenSeen = false;
 
     }
 }

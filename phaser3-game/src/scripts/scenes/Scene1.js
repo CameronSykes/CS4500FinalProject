@@ -1,5 +1,6 @@
 import BST from '../objects/BST.js';
 import { Person } from '../objects/Person.js';
+import { Cave } from '../objects/Cave.js';
 
 
 //In my opinon a Scene brings everything together and that's it
@@ -21,13 +22,7 @@ export default class Scene1 extends Phaser.Scene {
     //draw what will be used
     create ()  {
 
-        var personConfig = {
-            scene:this,
-            x:0,
-            y:0,
-            imageName:"person"
-        };
-        var player = new Person(personConfig);
+
 
         //Make list of images
         var nodeList = [];
@@ -43,34 +38,45 @@ export default class Scene1 extends Phaser.Scene {
                               [490,230]
                              ];
 
+        var Cave1 = new Cave(this,
+                             nodePositionArray[1][0],
+                             nodePositionArray[1][1],
+                             "cave",
+                             false);
+        
+
         //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
-        var nodeGroup = this.add.group();
-        
+        var caveGroup = this.add.group();
+         
         var curNode;
         //create a series of caves sprites
         //create a series of caves in the node positions
         for (var i = 0; i < nodePositionArray.length; i++) {
-            curNode = new Node(this,
+            curNode = new Cave(this,
                                 nodePositionArray[i][0],
                                 nodePositionArray[i][1],
-                                'cave'
+                               "cave",
+                               undefined //TODO place the node it represents
                                );
-            nodeGroup.add(curNode);
+            caveGroup.add(curNode);
         }
 
         //a tween is an animation of a sprite moving between 2 positons a
         //Timeline is a series of tweens
         var playerAnimationTimeline = this.tweens.createTimeline();
 
+        var player = new Person(this,0,0,"person");
         //animate it moving from one node to another
-        for (var i = 0; i < nodePositionArray.length; i++) {
+        for (i = 0; i < nodePositionArray.length; i++) {
             var tweenBuilderConfig = {
                 targets: player,
                 duration: 1000,
                 x : nodePositionArray[i][0],
-                y : nodePositionArray[i][1]
+                y : nodePositionArray[i][1],
+                offset : "+=500m"
             };
+
             playerAnimationTimeline.add(tweenBuilderConfig);
         }
 
