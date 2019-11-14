@@ -20,10 +20,10 @@ export class Cave extends Phaser.GameObjects.Sprite {
               inputYCoord,
               inputImageName);
 
+        this.xCoordinate = inputXCoord;
+        this.yCoordinate = inputYCoord;
         // show the sprite on the scene
         inputScene.add.existing(this);
-        // What could be diplayed in the tree
-        this.Node  = inputNode;
 
     }
     

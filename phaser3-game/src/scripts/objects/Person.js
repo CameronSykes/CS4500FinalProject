@@ -20,8 +20,6 @@ export class Person extends Phaser.GameObjects.Sprite {
 
         // show the sprite in the scene
         scene.add.existing(this);
-        //use these var to change visual representation
-        this.hasBeenSeen = false;
 
     }
 }
