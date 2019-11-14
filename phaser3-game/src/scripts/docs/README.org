@@ -1,0 +1,101 @@
+** UML
+   Note these are just my plans which are open to changing.
+
+   Some of these attributes have not been created yet
+*** BST.js
+    I propose we make a new class to store cave attributes like size and color
+
+     When we initialize the node we need to set the size, xy positions etc. I
+    think we will add more attributes should they be stored in it's own object
+   #+begin_src plantuml :file BST.png
+   @startuml
+   title: BST.js
+
+   BinarySearchTree *- Node : has many <
+
+   
+   Node *- Cave : has 1 <
+
+   class BinarySearchTree {
+      root
+      bfs()
+      dfs()
+      getNodesInOrder()
+      insert(inputNodeValue)
+      insertNode(curNode,inputNodeValue)
+   }
+   
+   class Node {
+      int content
+      leftChild
+      rightChild
+      parentNode
+   }
+   
+   class Cave {
+      xCoordinate
+      yCoordinate
+      color
+      size
+      string imageName
+   }
+   note bottom : Used to \nvisualize nodes
+   @enduml
+   #+end_src
+
+   #+RESULTS:
+   [[file:BST.png]]
+*** Animaton
+   Node *- Cave : has 1 >
+
+   #+begin_src plantuml :file Animation.png
+   @startuml
+   title: Animaton.js
+   TravelAnimation  -- Person : < uses
+   TravelAnimation  -- Cave : < uses
+
+   class TravelAnimation {
+   Scene scene
+   BinarySearchTree tree
+   string travelType
+   }
+   note top : attributes have \n not created yet
+
+   class Person {
+   xPos
+   yPos
+   string imageName
+   }
+   note right :  Should rename to\n CaveDigger
+
+   class Cave {
+      xCoordinate
+      yCoordinate
+      color
+      size
+      string imageName
+   }
+   @enduml
+
+   #+end_src
+
+   #+RESULTS:
+   [[file:Animation.png]]
+
+** Files
+  * Scene1.js
+     this stores thing onlynnecessary for the first level of thebgame
+  * Animation.js
+     Holds everything for moving the player
+
+
+  * Cave
+     Holds cave object holds xy coordinates, color and any visual aspects of the 
+  * Person
+    (I think it should be renamed)
+     Our customer needs a cave digger,  This is the sprite that travels from cave to cave.
+
+  * BST
+     The binary search tree is the backend. It holds the nodes and links between them.
+     It has no visble properties becuae tjose are stored in the Cave object
+     
