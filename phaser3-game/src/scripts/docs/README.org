@@ -46,7 +46,7 @@
   #+RESULTS:
   [[file:BST.png]]
 ** Animaton
-  Node *- Cave : has 1 >
+  
 
   #+begin_src plantuml :file Animation.png
   @startuml
