@@ -7,8 +7,21 @@ import { Cave } from './Cave.js';
 export class TravelAnimation {
 
     constructor(scene,
-                nodePositionArray,
+                binaryTree,
                 TraversalType) {
+
+        //This is hardcoded
+        //TODO make this dynamic get it form the bst
+        var nodePositionArray = [
+            [370,30],
+            [310,130],
+            [430,130],
+            [250,230],
+            [370,230],
+            [490,230]
+        ];
+
+
         //it requires a scene to do the animations on
         
         //Make list of images

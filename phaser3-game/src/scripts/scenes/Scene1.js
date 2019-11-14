@@ -1,4 +1,4 @@
-import BST from '../objects/BST.js';
+import { BinarySearchTree } from '../objects/BST.js';
 import { Person } from '../objects/Person.js';
 import { Cave } from '../objects/Cave.js';
 import { TravelAnimation } from '../objects/Animation.js';
@@ -23,22 +23,24 @@ export default class Scene1 extends Phaser.Scene {
     //draw what will be used
     create ()  {
 
-        //This is hardcoded
-        //TODO make this dynamic
-        var nodePositionArray = [
-            [370,30],
-            [310,130],
-            [430,130],
-            [250,230],
-            [370,230],
-            [490,230]
-        ];
+
+	var MainTree = new BinarySearchTree();
+	MainTree.insert(1);
+	MainTree.insert(0);
+	MainTree.insert(3);
+	MainTree.insert(4);
+	MainTree.insert(5);
+
+	console.log("TREE");
+	console.log(MainTree.getNodesInOrder());
+
 
         //Right Now all this does is an incorrect BFS
         //It should be extended to just take a BST object and a traveral type and animate it
         var Animation1 = new TravelAnimation(this,
-                                             nodePositionArray,
+					     MainTree,
                                              "BFS");
+
 
     }
     update(time, delta) {}
