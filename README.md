@@ -54,6 +54,8 @@ you will need to ssh into it again
 
 ## why each of us should have a user account
 
+To be discussed later
+
 1. configs. If we set the git user and email config globally we ill all be commiting and pushing under the same name email
 
 
