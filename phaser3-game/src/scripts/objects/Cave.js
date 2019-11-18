@@ -24,9 +24,31 @@ export class Cave extends Phaser.GameObjects.Sprite {
         this.yCoordinate = inputYCoord;
         // show the sprite on the scene
         inputScene.add.existing(this);
+   //handle clicking
+        //make clickable 
+        this.setInteractive();
 
     }
-    
+
+
+    //run this function to enable users to click on this cave 
+    makeClickable(){
+        this.setInteractive();
+
+        this.on('pointerup', this.onObjectClicked);
+    }
+
+
+    //handle clicks it takes a pointer becuase it needs  the mouse pointer that clicked it
+    onObjectClicked(pointer)
+    {
+        //add a layer of color on top of image
+
+        this.tint = 0x30000f;
+        
+
+    }
+        
     
     
 } 

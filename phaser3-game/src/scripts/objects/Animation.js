@@ -47,7 +47,11 @@ export class TravelAnimation {
             caveList.push(curCave);
             caveGroup.add(curCave);
         }
-
+        //make caves clickable
+        for(i = 0;i <caveList.length; i++){
+             caveList[i].makeClickable();
+        }
+        
         //a tween is an animation of a sprite moving between 2 positons a
         //Timeline is a series of tweens
         var playerAnimationTimeline = scene.tweens.createTimeline();
@@ -74,9 +78,9 @@ export class TravelAnimation {
         playerAnimationTimeline.play();
     }
     c//  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
-    //  Following this comes whatever you specify in the params array (in this case onRepeatParams)
+    //  Following this comes whatever you specify in the params array (in this case cave)
     updateTouchedNode(sprite, animation, cave) {
-       //change color
-            cave.tint = 0xff00ff;
+        //add a layer of color on top of image
+         cave.tint = 0xff00ff;
     }
 }
