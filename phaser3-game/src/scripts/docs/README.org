@@ -82,6 +82,21 @@
   #+RESULTS:
   [[file:Animation.png]]
 
+* Documentation Link dump
+  + lists of events
+    https://photonstorm.github.io/phaser3-docs/Phaser.Input.Events.html
+  + how to do on click event
+
+  This uses a lambda function you can function a name and define it somewhere
+  else
+    #+begin_src js
+   this.on('pointerup', function (pointer) {
+
+        this.clearTint();
+
+    });
+    #+end_src
+  
 * Files
  * Scene1.js
     this stores thing onlynnecessary for the first level of thebgame
