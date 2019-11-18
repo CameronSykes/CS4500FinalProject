@@ -1,24 +1,60 @@
-<<<<<<< HEAD
-Cave Digging
-To run use go to the directory containing index.html ```
-python -m SimpleHTTPServer 9999 ``` 
-If that doesn't work try if you are on Windows 
-``` python -m http.server 9999 ``` 
-Then in your browser go to ``` 
-localhost:9999 ```
-=======
-# Cave Digging
+##  Running
+ Thi program is writin in es6. It is a javascript verion writtien in 2015 it includes support for impots and exports
+ 
+  Brwosers cannot use the import export modules in es6 unless specified by using `type="module"` in the html.
+  
+  In order for browsers to run it smoothly it neeeds to be transpiled into es5 syntax. 
+ 
+ Nodejs will use babel to transpile our code into code that can run on most browsers.
+ 
+##  Us running
+Nodejs is supposed to run on your browsers
+In oroder to run this program you will need to install 
++ node
++ git 
 
-to run use go to the directory containing index.html
+
+## runing this on the server
+To run this on the server you will need to connect to the server.
+
+
+
+Each of us will need a specific port number to run this from so there are no conflicts
+
+If your port is 8089 you will run it like so 
 ```
-python -m SimpleHTTPServer 9999
+ssh -L 8089:localhost:8089 team@216.21.9.147
+
 ```
-If that doesn't work try if you are on Windows
+This will forward all connects to your localhost:8089 to port 8089 on the server. This is required for you to see the code running
+
+go to the phaser3-game directory run  this will start nodejs on port 8089 for you to run your code
 ```
-python -m http.server 9999
+npm start -- --port 8089
 ```
-Then in your browser go to 
+Which should output 
 ```
-localhost:9999
+> phaser-project-template-es6@3.19.0 start /home/team/main/khalfani/CS4500FinalProject-1/phaser3-game
+> webpack-dev-server --config webpack/webpack.dev.js "--port" "8089"
+
+..[a bunch of other stuff].
+
+
+ℹ ｢wdm｣: Compiled successfully.
+
 ```
->>>>>>> 343665a236722125b3a66e6a87c294ef29c17524
+
+Once you run this it will start a program that will compile your code. It will automatically recompile your code every time you edit it. 
+
+However you should not run this and another command in the same terminal at the same time.
+
+you will need to ssh into it again
+
+
+
+## why each of us should have a user account
+
+1. configs. If we set the git user and email config globally we ill all be commiting and pushing under the same name email
+
+
+
