@@ -1,8 +1,8 @@
-import 'phaser'
-import '@babel/polyfill'
+import 'phaser';
+import '@babel/polyfill';
 
-import Scene1 from './scenes/Scene1.js'
-import PreloadScene from './scenes/preloadScene'
+import Scene1 from './scenes/Scene1.js';
+import PreloadScene from './scenes/preloadScene';
 
 var platform;
 var screenWidth = 800;
@@ -29,7 +29,7 @@ var config =
         //         // update: update
         //     }
 
-        //TODO move preload and create function to another file
+        //DONE move preload and create function to another file
         //Make the program modular use preload create etc functions inanother file
         scene: [ Scene1 ]
     };
