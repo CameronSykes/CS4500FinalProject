@@ -77,7 +77,7 @@ export class TravelAnimation {
         //run all tween animations
         playerAnimationTimeline.play();
     }
-    c//  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
+    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
     //  Following this comes whatever you specify in the params array (in this case cave)
     updateTouchedNode(sprite, animation, cave) {
         //add a layer of color on top of image

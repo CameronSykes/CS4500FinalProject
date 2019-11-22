@@ -85,6 +85,33 @@ export class BinarySearchTree
         }
         return(nodeArray);
     }
+    //This do a binary serach and return all nodes in the search path a node 
+    //returns null if node not found
+    getSearchPathFromRoot(contentToFind){
+        var node = this.root;
+        var listOfTraversedNodes = [];
+        //if called before first insert
+        while(node != null  && node.content != contentToFind ){
+            listOfTraversedNodes.push(node);
+            if(contentToFind < node.content){
+                node = node.leftChild;
+            }
+            else{
+                node = node.rightChild;
+            }
+        }
+
+        if (node.content == contentToFind){
+            //add the node you found to the search Path
+            listOfTraversedNodes.push(node);
+            return(listOfTraversedNodes);   
+        }
+
+        console.log("Error node",contentToFind,"not found"); 
+        return(null);   
+
+    }
+
     // preorder(node)
     // postorder(node)
     // search(node, data)
@@ -110,13 +137,28 @@ export class Node {
     
 } 
 
+/*
+//Test if it works
+//make tree
+//      5 
+//    /   \ 
+//   3     7 
+//  /  \  /  \ 
+// 2   4  6   8 
+var MainTree                       = new BinarySearchTree();
+MainTree.insert(5);
+MainTree.insert(3);
+MainTree.insert(2);
+MainTree.insert(4);
+MainTree.insert(7);
+MainTree.insert(6);
+MainTree.insert(8);
+console.log("TREE");
+for (var i = 0; i < MainTree.getNodesInOrder().length; i++) {
+    console.log(MainTree.getNodesInOrder()[i].content);
+    
+}
+console.log(MainTree.getNodesInOrder());
 
-// Test if it works
-// var MainTree                       = new BinarySearchTree();
-// MainTree.root                      = new Node(1); 
-// MainTree.root.leftChild            = new Node(2); 
-// MainTree.root.rightChild           = new Node(3); 
-// MainTree.root.leftChild.leftChild  = new Node(4); 
-// MainTree.root.leftChild.rightChild = new Node(5); 
-// console.log("TREE");
-// console.log(MainTree.getNodesInOrder());
+
+// */ 

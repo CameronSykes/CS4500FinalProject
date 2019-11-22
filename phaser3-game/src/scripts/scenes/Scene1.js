@@ -38,7 +38,7 @@ export default class Scene1 extends Phaser.Scene {
         //Right Now all this does is an incorrect BFS
         //It should be extended to just take a BST object and a traveral type and animate it
         var Animation1 = new TravelAnimation(this,
-					     MainTree,
+					                                   MainTree,
                                              "BFS");
 
 
@@ -47,3 +47,4 @@ export default class Scene1 extends Phaser.Scene {
  
 
 }
+
