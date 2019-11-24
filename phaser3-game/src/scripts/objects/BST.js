@@ -114,7 +114,16 @@ export class BinarySearchTree
         return(null); 
 
     }
+    //do a binary serach and return all nodes in path
+    //returns null if node not found
+    getNodeFromContent(contentToFind){
+        var searchPath = this.getSearchPathFromContent(contentToFind);
+        if(searchPath!=null){
+            return(searchPath[searchPath.length - 1]);
+        }
+        return(null);
 
+    }
 
 
     getShortestPath(startNode,endNode){
@@ -161,9 +170,19 @@ export class BinarySearchTree
             }
         }
 
-    // preorder(node)
-    // postorder(node)
-    // search(node, data)
+
+        var startNodeSearchPathFromAncestor = this.getSearchPathFromContent(startNode.content,lastSharedAncestor);
+        var endNodeSearchPathFromAncestor = this.getSearchPathFromContent(endNode.content,lastSharedAncestor);
+        var shortestPath = Math.min(startNodeSearchPathFromAncestor.length,endNodeSearchPathFromRoot.length);
+        //remove shared parents 
+        for (i = 0; i < shortestPath; i++) {
+            if(startNodeSearchPathFromAncestor[i]  == endNodeSearchPathFromAncestor[i]){
+                startNodeSearchPathFromAncestor.splice(i,1); 
+            }
+        }
+  
+
+        return ( startNodeSearchPathFromAncestor.reverse().concat(endNodeSearchPathFromAncestor) );
     }
 }
 
@@ -181,10 +200,19 @@ export class Node {
         this.leftChild = null;
         this.rightChild = null; 
     }
-    
-    
-    
-} 
+   }
+
+
+//Many functions return a list of node objects, that is not easy see in the console
+//This will print contents of all nodes in a list for debug purposes
+function printNodeListContents(listOfNodes){
+    //This will print all node content seperated by spaces instead of newlines
+    var singleLineToPrint = "";
+    for (var i = 0; i < listOfNodes.length; i++) {
+        singleLineToPrint = singleLineToPrint + String(listOfNodes[i].content) + " ";
+    }
+    console.log(singleLineToPrint);
+}  
 
 /*
 //Test if it works
@@ -203,11 +231,19 @@ MainTree.insert(7);
 MainTree.insert(6);
 MainTree.insert(8);
 console.log("TREE");
-for (var i = 0; i < MainTree.getNodesInOrder().length; i++) {
-    console.log(MainTree.getNodesInOrder()[i].content);
-    
-}
-console.log(MainTree.getNodesInOrder());
 
 
-// */ 
+printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(3),
+                                               MainTree.getNodeFromContent(2)));
+
+printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(2),
+                                               MainTree.getNodeFromContent(3)));
+printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(8),
+                                               MainTree.getNodeFromContent(2)));
+
+printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(5),
+                                     MainTree.getNodeFromContent(2)));
+
+printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(2),
+                                               MainTree.getNodeFromContent(5)));
+*/
