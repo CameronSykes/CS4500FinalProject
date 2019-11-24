@@ -115,17 +115,63 @@ export class BinarySearchTree
 
     }
 
+
+
+    getShortestPath(startNode,endNode){
+        /* Assume you have a bst like this
+           /* //make tree
+           //      5 
+           //    /   \ 
+           //   3     7 
+           //  /  \  /  \ 
+           // 2   4  6   8 
+
+        Take 8 and 2 for example.
+
+        Find the first shared ancsestor node          : 5 
+ 
+        the shortest path from 8 to 2 is              : 8,7,5,3,2
+
+        This algorithm will
+        search from first shared ancsestor node to 8  : 5 7 8
+        search from first shared ancsestor node to 2  : 5 3 2
+
+        delete shared parents in begin node path
+        path to 8 : 7 8
+        path to 2 : 5 3 2
+
+        reverse the first path and append it to the second
+        path to 8 : 7 8
+        path to 2 : 5 3 2
+
+        8 7 5 3 2 
+        append first path to second 
+
+        */
+ 
+        var lastSharedAncestor;
+
+        var startNodeSearchPathFromRoot = this.getSearchPathFromContent(startNode.content);
+        var endNodeSearchPathFromRoot = this.getSearchPathFromContent(endNode.content);
+        var shortestPathFromRootLength = Math.min(startNodeSearchPathFromRoot.length,endNodeSearchPathFromRoot.length);
+ 
+        for (var i = 0; i < shortestPathFromRootLength; i++) {
+            if(startNodeSearchPathFromRoot[i]  == endNodeSearchPathFromRoot[i]){
+                lastSharedAncestor = startNodeSearchPathFromRoot[i];
+            }
+        }
+
     // preorder(node)
     // postorder(node)
     // search(node, data)
+    }
 }
 
 export class Node { 
     
     constructor(inputContent)
     {
-        //TODO 
-        //initalize Sprite class 
+
         // What could be diplayed in the tree
         this.content  =  inputContent;
 
