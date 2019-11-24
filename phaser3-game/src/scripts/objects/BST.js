@@ -33,6 +33,7 @@ export class BinarySearchTree
             // is there an empty space to insert it
             if(curNode.leftChild == null){
                 curNode.leftChild = inputNode;
+                inputNode.parentNode = curNode;
             }
             else{
                 //Try it again with the new node 
@@ -41,11 +42,12 @@ export class BinarySearchTree
         }
         //
         else if(curNode.rightChild == null){
-                curNode.rightChild = inputNode;
-            }
-            else{
-                this.insertNode(curNode.rightChild,inputNode);
-            }
+            curNode.rightChild = inputNode;
+            inputNode.parentNode = curNode;
+        }
+        else{
+            this.insertNode(curNode.rightChild,inputNode);
+        }
         
     }
     
@@ -54,7 +56,7 @@ export class BinarySearchTree
     // getRootNode() 
 
     //returns a array of nodes from inorder traversal
-    getNodesInOrder(node) {
+    getNodesInOrder() {
         // Traversal algorithm inspired by
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
         
