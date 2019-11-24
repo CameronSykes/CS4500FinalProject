@@ -87,30 +87,31 @@ export class BinarySearchTree
         }
         return(nodeArray);
     }
-    //This do a binary serach and return all nodes in the search path a node 
-    //returns null if node not found
-    getSearchPathFromRoot(contentToFind){
-        var node = this.root;
+    //This does a binary serach and return all nodes in the search path to a node
+    //returns null if node not found (contains end node in path) 
+    getSearchPathFromContent(contentToFind,parentNode){
+        if (parentNode === undefined)
+            parentNode = this.root;
+ 
         var listOfTraversedNodes = [];
         //if called before first insert
-        while(node != null  && node.content != contentToFind ){
-            listOfTraversedNodes.push(node);
-            if(contentToFind < node.content){
-                node = node.leftChild;
+        while(parentNode != null  && parentNode.content != contentToFind ){
+            listOfTraversedNodes.push(parentNode);
+            if(contentToFind < parentNode.content){
+                parentNode = parentNode.leftChild;
             }
             else{
-                node = node.rightChild;
+                parentNode = parentNode.rightChild;
             }
         }
 
-        if (node.content == contentToFind){
-            //add the node you found to the search Path
-            listOfTraversedNodes.push(node);
+        if (parentNode.content == contentToFind){
+            listOfTraversedNodes.push(parentNode);
             return(listOfTraversedNodes);   
         }
 
         console.log("Error node",contentToFind,"not found"); 
-        return(null);   
+        return(null); 
 
     }
 
