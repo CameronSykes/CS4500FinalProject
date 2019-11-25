@@ -2,7 +2,7 @@ import { BinarySearchTree } from '../objects/BST.js';
 
 import { Person } from '../objects/Person.js';
 import { Cave } from '../objects/Cave.js';
-import { TravelAnimation } from '../objects/Animation.js';
+import { TravelAnimation, InorderAnimation  } from '../objects/Animation.js';
 
 
 //In my opinon a Scene brings everything together and that's it
@@ -39,15 +39,15 @@ export default class Scene1 extends Phaser.Scene {
         this.initializeBST();
 
         this.initializeAllCaves();
-        //Right Now all this does is an incorrect BFS
-        //It should be extended to just take a BST object and a traveral type and animate it
 
-        var player = new Person(this,0,100,"person");
+        let playerStartXpos =  0;
+        let playerStartYpos =  100;
+        var player = new Person(this,playerStartXpos,playerStartYpos,"person");
 
-        var Animation1 = new TravelAnimation(this,
+        var Animation1 = new InorderAnimation(this,
 					                                   this.MainTree,
                                              player);
-
+        Animation1.play();
 
     }
     update(time, delta) {}

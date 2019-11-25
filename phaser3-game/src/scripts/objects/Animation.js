@@ -5,17 +5,25 @@ export class TravelAnimation {
 
     constructor(scene,
                 binarySearchTree,
-                player) {
+                player,
+                //list of nodes in order of where player will go
+                nodeList) {
 
         this.player = player;
+        this.scene = scene;
         this.binarySearchTree = binarySearchTree;
         this.playerWaitTimeAtNode = "+=500m";
+        this.timeToTravelBetweenCaves = 1000;
+        this.playerAnimationTimeline = null;
+        this.newNodeList = null;
 
-        let nodeList = binarySearchTree.getNodesInOrder();
-        console.log(binarySearchTree.bfs());
+        this.initializePath(nodeList);
+
+    }
+    initializePath(nodeList) {
 
         var nodePositionArray = [];
-        for (var i = 0; i < nodeList.length; i++) {
+        for (let i = 0; i < nodeList.length; i++) {
             nodePositionArray.push([
                 nodeList[i].getxCoord(),
                 nodeList[i].getyCoord()
@@ -25,14 +33,14 @@ export class TravelAnimation {
 
         //a tween is an animation of a sprite moving between 2 positons a
         //Timeline is a series of tweens
-        var playerAnimationTimeline = scene.tweens.createTimeline();
+        this.playerAnimationTimeline = this.scene.tweens.createTimeline();
 
         var tweenBuilderConfig;
         //animate it moving from one node to another
-        for (var i = 0; i < nodePositionArray.length; i++) {
+        for (let i = 0; i < nodePositionArray.length; i++) {
             tweenBuilderConfig = {
                 targets: this.player,
-                duration: 1000,
+                duration: this.timeToTravelBetweenCaves,
                 x : nodePositionArray[i][0],
                 y : nodePositionArray[i][1],
                 offset : this.playerWaitTimeAtNode,
@@ -40,17 +48,42 @@ export class TravelAnimation {
                 onComplete : this.updateTouchedNode,
                 onCompleteParams : [nodeList[i].cave] 
             };
-           
-            playerAnimationTimeline.add(tweenBuilderConfig);
+
+            this.playerAnimationTimeline.add(tweenBuilderConfig);
         }
 
-        //run all tween animations
-        playerAnimationTimeline.play();
     }
+
+    play(){
+        //run all tween animations
+        this.playerAnimationTimeline.play();
+    }
+
     //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
     //  Following this comes whatever you specify in the params array (in this case cave)
     updateTouchedNode(sprite, animation, cave) {
         //add a layer of color on top of image
          cave.tint = 0xff00ff;
+    }
+
+}
+
+
+
+//this class managages animations for levels
+//the Scene1 class everything handles for the level
+export class InorderAnimation extends TravelAnimation {
+
+    constructor(scene,
+                binarySearchTree,
+                player) {
+
+        let nodeList = binarySearchTree.getNodesInOrder();
+
+        super(scene,
+              binarySearchTree,
+              player,
+             nodeList);
+
     }
 }
