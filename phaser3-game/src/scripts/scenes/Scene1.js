@@ -1,4 +1,5 @@
 import { BinarySearchTree } from '../objects/BST.js';
+
 import { Person } from '../objects/Person.js';
 import { Cave } from '../objects/Cave.js';
 import { TravelAnimation } from '../objects/Animation.js';
@@ -10,6 +11,10 @@ export default class Scene1 extends Phaser.Scene {
     constructor () {
         // call superclass (Phaser.Scene) constructor.
         super({key:"Scene1"});
+        this.MainTree = null;
+        //list of values to insert into the BST as nodes
+        this.valList = [];
+
     }
     init(data) {}
     //load assests used
@@ -22,29 +27,102 @@ export default class Scene1 extends Phaser.Scene {
     }
     //draw what will be used
     create ()  {
+        //vals to make this tree
+        //      5 
+        //    /   \ 
+        //   3     7 
+        //  /  \    \ 
+        // 2   4     8 
+        this.valList = [5, 3, 7, 2, 4,8];
 
 
-	var MainTree = new BinarySearchTree();
-	MainTree.insert(1);
-	MainTree.insert(0);
-	MainTree.insert(3);
-	MainTree.insert(4);
-	MainTree.insert(5);
+        this.initializeBST();
 
-	console.log("TREE");
-	console.log(MainTree.getNodesInOrder());
-
-
+        this.initializeAllCaves();
         //Right Now all this does is an incorrect BFS
         //It should be extended to just take a BST object and a traveral type and animate it
+
+        var player = new Person(this,0,100,"person");
+
         var Animation1 = new TravelAnimation(this,
-					                                   MainTree,
-                                             "BFS");
+					                                   this.MainTree,
+                                             player);
 
 
     }
     update(time, delta) {}
- 
+
+    //Delete this comment
+    //Up to Cameron to decide what this does right now it initializes nodes x,y
+    //coordinates manually
+    //TODO Make it initialize node positions dynamicaly 
+    initializeBST(){
+        // ATTN: this.valList's values should be gotten rid of once we read in values
+        // Push user values onto this.valList
+        // UI floats at the top of the page and the cave system is
+        // animated under it
+
+
+        //window.screen.height should be replaced with the game screenWidth found in the game.js file in phaser3/src/game.js
+        var screenW = window.screen.width;
+
+        var caveRadius = 50;
+        //window.screen.height should be replaced with the game screenWidth found in the game.js file in phaser3/src/game.js
+        var k = window.screen.height / 5;
+	      this.MainTree =new BinarySearchTree(screenW, caveRadius, k);
+
+
+        //delete this when BST.js is tested and works
+        var nodePositionArray = [
+            [370,30],//5
+            [310,130],//3
+            [430,130],//7
+            [250,230],//2
+            [370,230],//4
+            [490,230]//8
+        ];
+        
+        for (var i = 0; i < this.valList.length; i++) {
+            
+            this.MainTree.insert(this.valList[i]);
+            
+            //Begin delete-this
+            //[2019-11-24 Sun] I assume the BST is not tested so i'm setting the x and y manually. Delete this when BST.js works correctly
+            this.MainTree.getNodeFromContent(this.valList[i]).setxCoord(nodePositionArray[i][0]);
+
+            this.MainTree.getNodeFromContent(this.valList[i]).setyCoord(nodePositionArray[i][1]);
+            //End delete-this
+        }
+
+        
+    }
+
+    initializeAllCaves(){
+          //elements such as nodes on a tree are stored as groups
+        //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
+        var caveGroup = this.add.group();//TODO find out what else there is to do with groups
+
+        //create a series of caves sprites
+        //create a series of caves in the node positions
+        
+        for (let i = 0; i<this.valList.length; i++)
+        {
+            let posNode = this.MainTree.getNodeFromContent(this.valList[i]);
+            let currCave = new Cave(this,
+                                posNode.getxCoord(),
+                                posNode.getyCoord(),
+                               "cave",
+                               posNode
+                               );
+            
+            currCave.makeClickable();
+            caveGroup.add(currCave);
+
+            posNode.cave = currCave;
+
+        }
+
+    }
 
 }
 

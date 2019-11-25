@@ -6,10 +6,15 @@ export class BinarySearchTree
 { 
     constructor(screenW, caveRadius, kFactor)
     {
-        // Root of a binary seach tree starts off empty
+        // Root of a binary seach tree does not exist at this pointers
+        //it is initialized in the insert function 
         this.root = null;
-        this.root.setxCoord(screenW/2);
-        this.root.setyCoord(caveRadius + 10);
+        //root = new Node(null) would mean the properties should be overridden
+        //when a new node is created
+
+        //save these properties to be used when inserting
+        this.screenW = screenW;
+        this.caveRadius = caveRadius;
         this.kFactor = kFactor;
     }
 
@@ -24,6 +29,8 @@ export class BinarySearchTree
         if(this.root == null)
         {
             this.root = nodeToInsert;
+            this.root.setxCoord(this.screenW/2);
+            this.root.setyCoord(this.caveRadius + 10);
         } 
         else
         {
@@ -51,7 +58,7 @@ export class BinarySearchTree
             {
                 // The left child is to the left of the parent node
                 // Get the parent node's x coordinate then decrement by this.kFactor/2
-                inputNode.setxCoord(curNode.getxCoord() - (kFactor / 2));
+                inputNode.setxCoord(curNode.getxCoord() - (this.kFactor / 2));
 
                 // Insert the node
                 curNode.leftChild = inputNode;
@@ -68,7 +75,7 @@ export class BinarySearchTree
         {
             // The right child is to the right of the parent node
             // Get the parent node's x coordinate then increment by this.kFactor/2
-            inputNode.setxCoord(curNode.getxCoord() + (kFactor / 2));
+            inputNode.setxCoord(curNode.getxCoord() + (this.kFactor / 2));
 
             // A child node is under a parent node
             // Get the parent node's y coordinate then decrement by this.kFactor
@@ -88,8 +95,8 @@ export class BinarySearchTree
         while(queue.length)
         {
             node= queue.shift();
-            if(node.left) queue.push(node.left);
-            if(node.right) queue.push(node.right);
+            if(node.leftChild) queue.push(node.leftChild);
+            if(node.rightChild) queue.push(node.rightChild);
             finalData.push(node);
         }
 
@@ -241,6 +248,8 @@ export class Node {
         this.parentNode = null;
         this.leftChild = null;
         this.rightChild = null;
+        //a cave is the visual representation
+        this.cave = null;
     }
 
     getContent() { return this.content; }
