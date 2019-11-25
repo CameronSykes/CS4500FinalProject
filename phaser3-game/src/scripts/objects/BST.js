@@ -4,53 +4,97 @@
 
 export class BinarySearchTree
 { 
-    constructor() 
-    { 
-        // root of a binary seach tree starts off empty
+    constructor(screenW, caveRadius, kFactor)
+    {
+        // Root of a binary seach tree starts off empty
         this.root = null;
+        this.root.setxCoord(screenW/2);
+        this.root.setyCoord(caveRadius + 10);
+        this.kFactor = kFactor;
     }
 
-    //implement recursive algorithm
-    insert(inputNodeValue) {
+    getRootNode() { return this.root; }
 
-
+    //Returns the node created in BST
+    insert(inputNodeValue)
+    {
         var nodeToInsert = new Node(inputNodeValue);
-        //if its the first time inserting a node make it the root
-        if(this.root == null){
+
+        // If its the first time inserting a node make it the root
+        if(this.root == null)
+        {
             this.root = nodeToInsert;
         } 
-        else{
-            //start recursively searching for node to insert this new node under
-            //beggining at root
-            this.insertNode(this.root,nodeToInsert);
+        else
+        {
+            //Start recursively searching for node to insert this new node under
+            //Beginning at root
+            this.insertNode(this.root, nodeToInsert);
         }
+        //the node was modified in the this.insertNode(this.root, nodeToInsert);
+        //function. It should be returned outside the if statement so the function always returns a value
+
+        return(nodeToInsert);
     }
 
-    //Handle traversal down tree to find place to insert new node 
-    insertNode(curNode, inputNode) {
+    // Handle traversal down tree to find place to insert new node
+    insertNode(curNode, inputNode)
+    {
+        // A child node is under a parent node
+        // Get the parent node's y coordinate then decrement by this.kFactor
+        inputNode.setyCoord(curNode.getyCoord() - this.kFactor);
 
-        if(inputNode.content < curNode.content ){
-            // is there an empty space to insert it
-            if(curNode.leftChild == null){
+        if(inputNode.content < curNode.content)
+        {
+            // Is there an empty space to insert it
+            if(curNode.leftChild == null)
+            {
+                // The left child is to the left of the parent node
+                // Get the parent node's x coordinate then decrement by this.kFactor/2
+                inputNode.setxCoord(curNode.getxCoord() - (kFactor / 2));
+
+                // Insert the node
                 curNode.leftChild = inputNode;
                 inputNode.parentNode = curNode;
             }
-            else{
-                //Try it again with the new node 
-                this.insertNode(curNode.leftChild,inputNode);
+            else
+            {
+                //Try it again with the new node
+                this.insertNode(curNode.leftChild, inputNode);
             }
         }
-        //
-        else if(curNode.rightChild == null){
+        // The value content of the node to be added is greater than
+        else if(curNode.rightChild == null)
+        {
+            // The right child is to the right of the parent node
+            // Get the parent node's x coordinate then increment by this.kFactor/2
+            inputNode.setxCoord(curNode.getxCoord() + (kFactor / 2));
+
+            // A child node is under a parent node
+            // Get the parent node's y coordinate then decrement by this.kFactor
+
             curNode.rightChild = inputNode;
             inputNode.parentNode = curNode;
         }
-        else{
-            this.insertNode(curNode.rightChild,inputNode);
-        }
-        
+        else { this.insertNode(curNode.rightChild, inputNode); }
+        return curNode;
     }
-    
+    bfs()
+    {
+        let node = this.root;
+        const queue = [node];
+        const finalData = [ ];
+
+        while(queue.length)
+        {
+            node= queue.shift();
+            if(node.left) queue.push(node.left);
+            if(node.right) queue.push(node.right);
+            finalData.push(node);
+        }
+
+        return finalData;
+    } 
     // Helper function 
     // findMinNode() 
     // getRootNode() 
@@ -190,18 +234,24 @@ export class Node {
     
     constructor(inputContent)
     {
+        this.content  = inputContent;
+        this.xCoord = 0;
+        this.yCoord = 0;
 
-        // What could be diplayed in the tree
-        this.content  =  inputContent;
-
-        // Javascript does not have pointers 
-        // to make a node just do the node  Node.leftChild = new Node(X)
         this.parentNode = null;
         this.leftChild = null;
-        this.rightChild = null; 
+        this.rightChild = null;
     }
-   }
 
+    getContent() { return this.content; }
+    setContent(val) { this.content = val; }
+
+    getxCoord() { return this.xCoord; }
+    setxCoord(xVal) { this.xCoord = xVal; }
+
+    getyCoord() { return this.yCoord; }
+    setyCoord(yVal) { this.yCoord = yVal; }
+}
 
 //Many functions return a list of node objects, that is not easy see in the console
 //This will print contents of all nodes in a list for debug purposes
