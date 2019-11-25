@@ -84,7 +84,6 @@ export class InorderAnimation extends TravelAnimation {
                 player) {
 
         let nodePath = binarySearchTree.getNodesInOrder();
-
         super(scene,
               binarySearchTree,
               player,

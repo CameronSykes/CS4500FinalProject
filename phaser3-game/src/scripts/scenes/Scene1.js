@@ -15,6 +15,10 @@ export default class Scene1 extends Phaser.Scene {
         //list of values to insert into the BST as nodes
         this.valList = [];
 
+
+        //the 'this' keyword changes based on what function calls it
+        //this makes this keyword bind to Scene1 instance always in the following instance methods 
+        this.runAnimation = this.runAnimation.bind(this);
     }
     init(data) {}
     //load assests used
@@ -40,23 +44,22 @@ export default class Scene1 extends Phaser.Scene {
 
         this.initializeAllCaves();
 
+    }
+    update(time, delta) {
+    }
+
+    runAnimation(){
         let playerStartXpos =  0;
         let playerStartYpos =  100;
+
+
         let player = new Person(this,playerStartXpos,playerStartYpos,"person");
         var Animation1 = new InorderAnimation(this,
 					                                    this.MainTree,
                                               player);
         Animation1.play();
-
-        //this will listen for a down event 
-        //on every object that is set interactive
-        this.input.on('gameobjectdown',this.runAnimation);
-
     }
-    update(time, delta) {}
 
-    runAnimation(){
-    }
     handleCaveClick(){
         this.runAnimation(); 
     }
@@ -90,11 +93,11 @@ export default class Scene1 extends Phaser.Scene {
             [370,230],//4
             [490,230]//8
         ];
-        
+
         for (var i = 0; i < this.valList.length; i++) {
-            
+
             this.MainTree.insert(this.valList[i]);
-            
+
             //Begin delete-this
             //[2019-11-24 Sun] I assume the BST is not tested so i'm setting the x and y manually. Delete this when BST.js works correctly
             this.MainTree.getNodeFromContent(this.valList[i]).setxCoord(nodePositionArray[i][0]);
@@ -103,18 +106,18 @@ export default class Scene1 extends Phaser.Scene {
             //End delete-this
         }
 
-        
+
     }
 
     initializeAllCaves(){
-        
+
           //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
         var caveGroup = this.add.group();//TODO find out what else there is to do with groups
 
         //create a series of caves sprites
         //create a series of caves in the node positions
-        
+
         for (let i = 0; i<this.valList.length; i++)
         {
             let posNode = this.MainTree.getNodeFromContent(this.valList[i]);
@@ -124,7 +127,7 @@ export default class Scene1 extends Phaser.Scene {
                                "cave",
                                posNode
                                );
-            
+
             currCave.makeClickable();
             caveGroup.add(currCave);
 
