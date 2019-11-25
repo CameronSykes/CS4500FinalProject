@@ -42,15 +42,24 @@ export default class Scene1 extends Phaser.Scene {
 
         let playerStartXpos =  0;
         let playerStartYpos =  100;
-        var player = new Person(this,playerStartXpos,playerStartYpos,"person");
-
+        let player = new Person(this,playerStartXpos,playerStartYpos,"person");
         var Animation1 = new InorderAnimation(this,
-					                                   this.MainTree,
-                                             player);
+					                                    this.MainTree,
+                                              player);
         Animation1.play();
+
+        //this will listen for a down event 
+        //on every object that is set interactive
+        this.input.on('gameobjectdown',this.runAnimation);
 
     }
     update(time, delta) {}
+
+    runAnimation(){
+    }
+    handleCaveClick(){
+        this.runAnimation(); 
+    }
 
     //Delete this comment
     //Up to Cameron to decide what this does right now it initializes nodes x,y
@@ -98,6 +107,7 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     initializeAllCaves(){
+        
           //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
         var caveGroup = this.add.group();//TODO find out what else there is to do with groups

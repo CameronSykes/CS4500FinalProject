@@ -138,6 +138,7 @@ export class BinarySearchTree
         }
         return(nodeArray);
     }
+    
     //This does a binary serach and return all nodes in the search path to a node
     //returns null if node not found (contains end node in path) 
     getSearchPathFromContent(contentToFind,parentNode){
@@ -235,6 +236,24 @@ export class BinarySearchTree
 
         return ( startNodeSearchPathFromAncestor.reverse().concat(endNodeSearchPathFromAncestor) );
     }
+    // make player only go up and down (left|right)Child or parent pointers  
+    //use shortest path algorithm on all nodes in nodePath and connect them in a sensible way
+    //convert a player path [1,0,2] to [1,0,1,2]
+    connectNodesUsingOnlyLinks(nodePath){
+        let newPath = [];
+        for (let i = 0; i < nodePath.length-1; i++) {
+          let shortestPath = this.getShortestPath(nodePath[i],nodePath[i+1]);
+            
+            //the last item in shortest path is the second argument sent 
+            //the end node is already the next node
+            for (let j = 0; j < shortestPath.length-1; j++) {
+                newPath.push(shortestPath[j]);
+            } 
+        } 
+        //add last node
+        newPath.push(nodePath[nodePath.length -1]); 
+        return newPath;
+    }
 }
 
 export class Node { 
@@ -291,9 +310,23 @@ MainTree.insert(6);
 MainTree.insert(8);
 console.log("TREE");
 
+printNodeListContents(MainTree.getNodesInOrder());
+printNodeListContents(MainTree.connectNodesUsingOnlyLinks(MainTree.getNodesInOrder()));
 
-printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(3),
-                                               MainTree.getNodeFromContent(2)));
+// printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(3),
+//                                                MainTree.getNodeFromContent(2)));
+
+// printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(2),
+//                                                MainTree.getNodeFromContent(3)));
+// printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(8),
+//                                                MainTree.getNodeFromContent(2)));
+
+// printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(5),
+//                                      MainTree.getNodeFromContent(2)));
+
+// printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(2),
+//                                                MainTree.getNodeFromContent(5)));
+
 
 printNodeListContents(MainTree.getShortestPath(MainTree.getNodeFromContent(2),
                                                MainTree.getNodeFromContent(3)));

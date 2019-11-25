@@ -7,8 +7,8 @@ export class TravelAnimation {
                 binarySearchTree,
                 player,
                 //list of nodes in order of where player will go
-                nodeList) {
-
+                nodePath) {
+        //TODO Note a scene cannot be used as a property it will it will cuase an error later
         this.player = player;
         this.scene = scene;
         this.binarySearchTree = binarySearchTree;
@@ -17,16 +17,20 @@ export class TravelAnimation {
         this.playerAnimationTimeline = null;
         this.newNodeList = null;
 
-        this.initializePath(nodeList);
+        this.initializePath(nodePath);
 
     }
-    initializePath(nodeList) {
+    initializePath(nodePath) {
 
         var nodePositionArray = [];
-        for (let i = 0; i < nodeList.length; i++) {
+
+        //connect nodes to break avoid breaking walls
+        nodePath = this.binarySearchTree.connectNodesUsingOnlyLinks(nodePath);
+
+        for (let i = 0; i < nodePath.length; i++) {
             nodePositionArray.push([
-                nodeList[i].getxCoord(),
-                nodeList[i].getyCoord()
+                nodePath[i].getxCoord(),
+                nodePath[i].getyCoord()
             ]);
         }
 
@@ -46,7 +50,7 @@ export class TravelAnimation {
                 offset : this.playerWaitTimeAtNode,
                 //when the fucntion stopps it will run the follow 
                 onComplete : this.updateTouchedNode,
-                onCompleteParams : [nodeList[i].cave] 
+                onCompleteParams : [nodePath[i].cave] 
             };
 
             this.playerAnimationTimeline.add(tweenBuilderConfig);
@@ -66,6 +70,7 @@ export class TravelAnimation {
          cave.tint = 0xff00ff;
     }
 
+
 }
 
 
@@ -78,12 +83,12 @@ export class InorderAnimation extends TravelAnimation {
                 binarySearchTree,
                 player) {
 
-        let nodeList = binarySearchTree.getNodesInOrder();
+        let nodePath = binarySearchTree.getNodesInOrder();
 
         super(scene,
               binarySearchTree,
               player,
-             nodeList);
+             nodePath);
 
     }
 }
