@@ -75,8 +75,21 @@ export class TravelAnimation {
 
 
 
-//this class managages animations for levels
-//the Scene1 class everything handles for the level
+export class BFSAnimation extends TravelAnimation {
+
+    constructor(scene,
+                binarySearchTree,
+                player) {
+
+        let nodePath = binarySearchTree.bfs();
+        super(scene,
+              binarySearchTree,
+              player,
+              nodePath);
+
+    }
+}
+
 export class InorderAnimation extends TravelAnimation {
 
     constructor(scene,

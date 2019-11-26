@@ -2,7 +2,7 @@ import { BinarySearchTree } from '../objects/BST.js';
 
 import { Player } from '../objects/Player.js';
 import { Cave } from '../objects/Cave.js';
-import { TravelAnimation, InorderAnimation  } from '../objects/Animation.js';
+import { TravelAnimation, BFSAnimation, InorderAnimation  } from '../objects/Animation.js';
 
 
 //In my opinon a Scene brings everything together and that's it
@@ -54,10 +54,13 @@ export default class Scene1 extends Phaser.Scene {
 
 
         let player = new Player(this,playerStartXpos,playerStartYpos,"person");
-        var Animation1 = new InorderAnimation(this,
-					                                    this.MainTree,
-                                              player);
-        Animation1.play();
+        // var Animation1 = new InorderAnimation(this,
+				// 	                                    this.MainTree,
+        //                                       player);
+        var Animation2 = new BFSAnimation(this,
+					                                this.MainTree,
+                                          player);
+        Animation2.play();
     }
 
     handleCaveClick(){
@@ -86,7 +89,8 @@ export default class Scene1 extends Phaser.Scene {
 
         //delete this when BST.js is tested and works
         var nodePositionArray = [
-            [370,30],//5
+            
+            [370,30],//pos of node with content: 5
             [310,130],//3
             [430,130],//7
             [250,230],//2
@@ -111,7 +115,7 @@ export default class Scene1 extends Phaser.Scene {
 
     initializeAllCaves(){
 
-          //elements such as nodes on a tree are stored as groups
+        //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
         var caveGroup = this.add.group();//TODO find out what else there is to do with groups
 
