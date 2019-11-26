@@ -20,14 +20,23 @@ export class Cave extends Phaser.GameObjects.Sprite {
               inputYCoord,
               inputImageName);
 
-        this.xCoordinate = inputXCoord;
-        this.yCoordinate = inputYCoord;
+        this.content = inputNode.content;
+        
+        
+        this.scene = inputScene;
+        this.xCoord = inputXCoord;
+        this.yCoord = inputYCoord;
         // show the sprite on the scene
         inputScene.add.existing(this);
-   //handle clicking
+        
         //make clickable 
         this.setInteractive();
+        
 
+        //I subtract 5 to position it correctly
+        this.textSprite = inputScene.add.text(inputXCoord-5,
+                                              inputYCoord-5,
+                                              String(this.content));
     }
 
 
@@ -46,7 +55,7 @@ export class Cave extends Phaser.GameObjects.Sprite {
 
         this.tint = 0x30000f;
         
-
+        this.scene.handleCaveClick();
     }
         
     

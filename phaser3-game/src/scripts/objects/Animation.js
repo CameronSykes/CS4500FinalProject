@@ -1,86 +1,106 @@
 
-import { Person } from './Person.js';
-import { Cave } from './Cave.js';
-
-//this class managages animatinos for levels
-//the Scene1 class only handles things for it's class
+//this class managages animations for levels
+//the Scene1 class everything handles for the level
 export class TravelAnimation {
 
     constructor(scene,
-                binaryTree,
-                TraversalType) {
+                binarySearchTree,
+                player,
+                //list of nodes in order of where player will go
+                nodePath) {
+        //TODO Note a scene cannot be used as a property it will it will cuase an error later
+        this.player = player;
+        this.scene = scene;
+        this.binarySearchTree = binarySearchTree;
+        this.playerWaitTimeAtNode = "+=500m";
+        this.timeToTravelBetweenCaves = 1000;
+        this.playerAnimationTimeline = null;
+        this.newNodeList = null;
 
-        //This is hardcoded
-        //TODO make this dynamic get it form the bst
-        var nodePositionArray = [
-            [370,30],
-            [310,130],
-            [430,130],
-            [250,230],
-            [370,230],
-            [490,230]
-        ];
+        this.initializePath(nodePath);
 
+    }
+    initializePath(nodePath) {
 
-        //it requires a scene to do the animations on
-        
-        //Make list of images
-        var nodeList = [];
+        var nodePositionArray = [];
 
+        //connect nodes to break avoid breaking walls
+        nodePath = this.binarySearchTree.connectNodesUsingOnlyLinks(nodePath);
 
-
-        //elements such as nodes on a tree are stored as groups
-        //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
-        var caveGroup = scene.add.group();
-         
-        var caveList = [];
-        var curCave;
-        //create a series of caves sprites
-        //create a series of caves in the node positions
-        for (var i = 0; i < nodePositionArray.length; i++) {
-            curCave = new Cave(scene,
-                                nodePositionArray[i][0],
-                                nodePositionArray[i][1],
-                               "cave",
-                               undefined //TODO place the node it represents
-                               );
-            caveList.push(curCave);
-            caveGroup.add(curCave);
+        for (let i = 0; i < nodePath.length; i++) {
+            nodePositionArray.push([
+                nodePath[i].getxCoord(),
+                nodePath[i].getyCoord()
+            ]);
         }
-        //make caves clickable
-        for(i = 0;i <caveList.length; i++){
-             caveList[i].makeClickable();
-        }
-        
+
+
         //a tween is an animation of a sprite moving between 2 positons a
         //Timeline is a series of tweens
-        var playerAnimationTimeline = scene.tweens.createTimeline();
+        this.playerAnimationTimeline = this.scene.tweens.createTimeline();
 
-        var player = new Person(scene,0,0,"person");
         var tweenBuilderConfig;
         //animate it moving from one node to another
-        for (i = 0; i < nodePositionArray.length; i++) {
+        for (let i = 0; i < nodePositionArray.length; i++) {
             tweenBuilderConfig = {
-                targets: player,
-                duration: 1000,
+                targets: this.player,
+                duration: this.timeToTravelBetweenCaves,
                 x : nodePositionArray[i][0],
                 y : nodePositionArray[i][1],
-                offset : "+=500m",
+                offset : this.playerWaitTimeAtNode,
                 //when the fucntion stopps it will run the follow 
                 onComplete : this.updateTouchedNode,
-                onCompleteParams : [caveList[i]] 
+                onCompleteParams : [nodePath[i].cave] 
             };
-           
-            playerAnimationTimeline.add(tweenBuilderConfig);
+
+            this.playerAnimationTimeline.add(tweenBuilderConfig);
         }
 
-        //run all tween animations
-        playerAnimationTimeline.play();
     }
-    c//  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
+
+    play(){
+        //run all tween animations
+        this.playerAnimationTimeline.play();
+    }
+
+    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
     //  Following this comes whatever you specify in the params array (in this case cave)
     updateTouchedNode(sprite, animation, cave) {
         //add a layer of color on top of image
          cave.tint = 0xff00ff;
+    }
+
+
+}
+
+
+
+export class BFSAnimation extends TravelAnimation {
+
+    constructor(scene,
+                binarySearchTree,
+                player) {
+
+        let nodePath = binarySearchTree.bfs();
+        super(scene,
+              binarySearchTree,
+              player,
+              nodePath);
+
+    }
+}
+
+export class InorderAnimation extends TravelAnimation {
+
+    constructor(scene,
+                binarySearchTree,
+                player) {
+
+        let nodePath = binarySearchTree.getNodesInOrder();
+        super(scene,
+              binarySearchTree,
+              player,
+             nodePath);
+
     }
 }

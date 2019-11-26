@@ -51,7 +51,7 @@
   #+begin_src plantuml :file Animation.png
   @startuml
   title: Animaton.js
-  TravelAnimation  -- Person : < uses
+  TravelAnimation  -- Player : < uses
   TravelAnimation  -- Cave : < uses
 
   class TravelAnimation {
@@ -61,7 +61,7 @@
   }
   note top : attributes have \n not created yet
 
-  class Person {
+  class Player {
   xPos
   yPos
   string imageName
@@ -106,7 +106,7 @@
 
  * Cave
     Holds cave object holds xy coordinates, color and any visual aspects of the 
- * Person
+ * Player
    (I think it should be renamed)
     Our customer needs a cave digger,  This is the sprite that travels from cave to cave.
 

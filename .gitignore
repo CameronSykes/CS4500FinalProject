@@ -2,4 +2,7 @@ phaser3-game/dist
 phaser3-game/.cache
 phaser3-game/.vscode
 #ignore emacs autosave files
-*~ 
+*~
+
+#emacs javascript config
+.indium.json

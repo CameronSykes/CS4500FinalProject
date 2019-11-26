@@ -1,0 +1,13 @@
+* Scene
+  From my understanding each scene is a level.
+
+  Each scene/level would have a BST that would hold all the nodes and the representions of the nodes.
+  #+begin_src plantuml :file ./images/Scene.png
+class Scene {
+     BinarySearchTree mainTree
+     Cave playerCave
+     rightChild
+     parentNode
+  }
+  
+  #+end_src
