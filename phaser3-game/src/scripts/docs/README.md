@@ -48,7 +48,7 @@ Node \*- Cave : has 1 >
 
 -   Cave
     Holds cave object holds xy coordinates, color and any visual aspects of the
--   Person
+-   Player
     (I think it should be renamed)
      Our customer needs a cave digger,  This is the sprite that travels from cave to cave.
 

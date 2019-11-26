@@ -1,6 +1,6 @@
 import { BinarySearchTree } from '../objects/BST.js';
 
-import { Person } from '../objects/Person.js';
+import { Player } from '../objects/Player.js';
 import { Cave } from '../objects/Cave.js';
 import { TravelAnimation, InorderAnimation  } from '../objects/Animation.js';
 
@@ -53,7 +53,7 @@ export default class Scene1 extends Phaser.Scene {
         let playerStartYpos =  100;
 
 
-        let player = new Person(this,playerStartXpos,playerStartYpos,"person");
+        let player = new Player(this,playerStartXpos,playerStartYpos,"person");
         var Animation1 = new InorderAnimation(this,
 					                                    this.MainTree,
                                               player);
