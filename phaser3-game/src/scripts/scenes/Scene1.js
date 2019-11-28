@@ -15,6 +15,7 @@ export default class Scene1 extends Phaser.Scene {
         //list of values to insert into the BST as nodes
         this.valList = [];
 
+        this.currentAnimation = null;
 
         //the 'this' keyword changes based on what function calls it
         //this makes this keyword bind to Scene1 instance always in the following instance methods 
@@ -44,6 +45,21 @@ export default class Scene1 extends Phaser.Scene {
 
         this.initializeAllCaves();
 
+        this.input.keyboard.on('keydown', function (event) {
+            
+            if (event.keyCode === 37)
+            {
+                //  left
+                this.currentAnimation.resume();
+            }
+            else if (event.keyCode === 39)
+            {
+                this.currentAnimation.pauseOnNextNode();
+                //  right
+            }
+        },this);
+
+
     }
     update(time, delta) {
     }
@@ -60,6 +76,7 @@ export default class Scene1 extends Phaser.Scene {
         var Animation2 = new BFSAnimation(this,
 					                                this.MainTree,
                                           player);
+        this.currentAnimation = Animation2;
         Animation2.play();
     }
 
@@ -117,7 +134,7 @@ export default class Scene1 extends Phaser.Scene {
 
         //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
-        var caveGroup = this.add.group();//TODO find out what else there is to do with groups
+        var caveGroup = this.add.group();
 
         //create a series of caves sprites
         //create a series of caves in the node positions

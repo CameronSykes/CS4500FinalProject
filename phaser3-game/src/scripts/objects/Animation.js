@@ -15,9 +15,11 @@ export class TravelAnimation {
         this.playerWaitTimeAtNode = "+=500m";
         this.timeToTravelBetweenCaves = 1000;
         this.playerAnimationTimeline = null;
-        this.newNodeList = null;
+        this.canContinue = true;
 
         this.initializePath(nodePath);
+
+        this.handleTweenEnd = this.handleTweenEnd.bind(this);
 
     }
     initializePath(nodePath) {
@@ -49,8 +51,8 @@ export class TravelAnimation {
                 y : nodePositionArray[i][1],
                 offset : this.playerWaitTimeAtNode,
                 //when the fucntion stopps it will run the follow 
-                onComplete : this.updateTouchedNode,
-                onCompleteParams : [nodePath[i].cave] 
+                onComplete : this.handleTweenEnd,
+                onCompleteParams : [this,nodePath[i].cave] 
             };
 
             this.playerAnimationTimeline.add(tweenBuilderConfig);
@@ -59,18 +61,37 @@ export class TravelAnimation {
     }
 
     play(){
-        //run all tween animations
-        this.playerAnimationTimeline.play();
+            this.playerAnimationTimeline.play();
     }
 
     //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
     //  Following this comes whatever you specify in the params array (in this case cave)
-    updateTouchedNode(sprite, animation, cave) {
+    updateTouchedCave(cave) {
         //add a layer of color on top of image
          cave.tint = 0xff00ff;
     }
+    //animationObject has to be sent becuase it wll be called from another object and won't be able to access the parent animation
+    handleTweenEnd(sprite, animation, animationObject, cave) {
+        if(animationObject.canContinue == true){
+            animationObject.playerAnimationTimeline.resume();
+        }
+        else{
+            animationObject.playerAnimationTimeline.pause();
+        }
+        animationObject.updateTouchedCave(cave);
+    }
 
-
+    //when the handleTweenEnd funtion is called this will cause it to
+    //dont pause immediately or else the cave digger will stop in the middle of a tunnel
+    pauseOnNextNode(){
+        console.log("pause");
+        this.canContinue = false;
+    }
+    resume(){
+        console.log("continue");
+        this.canContinue = true;
+        this.playerAnimationTimeline.resume();
+    }
 }
 
 
