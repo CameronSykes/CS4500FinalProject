@@ -21,6 +21,7 @@ export default class Scene1 extends Phaser.Scene {
         //this makes this keyword bind to Scene1 instance always in the following instance methods 
         this.initializeMenuItems = this.initializeMenuItems.bind(this);
         this.runAnimation = this.runAnimation.bind(this);
+        this.createTextButton = this.createTextButton.bind(this);
     }
     init(data) {}
     //load assests used
@@ -28,8 +29,10 @@ export default class Scene1 extends Phaser.Scene {
         //the directory is relative to the index.html file or whichever html
         //file that Scene1 is loaded from
         var imageDir = "../assets/images/";
+
         this.load.image("cave",imageDir+"cave.png");
         this.load.image("person",imageDir+"person.png");
+        
     }
     //draw what will be used
     create ()  {
@@ -53,62 +56,47 @@ export default class Scene1 extends Phaser.Scene {
     }
     // this creates items that will let the user start and stop 
     initializeMenuItems(){
-        var startAnimationButtonText = "Start animation";
-        this.startAnimationButton = this.add.text(100, 90, startAnimationButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
-        //change color on hover to indicate that its clickable
-        this.startAnimationButton.on('pointerover', () => {
-            this.startAnimationButton.setTint(0xf0ff00);
-        });
-        this.startAnimationButton.on('pointerout', () =>{
-            this.startAnimationButton.setTint(0xffffff);
-        });
+        
+        this.startAnimationButton = this.createTextButton(100, 90, "Start animation");
         //handle on click
         this.startAnimationButton.on('pointerdown', () => {
             this.runAnimation(); 
         }); 
-
-
-
-        var pauseAnimationButtonText = "Pause animation";
-        this.pauseAnimationButton = this.add.text(100, 90+100, pauseAnimationButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
-        //change color on hover to indicate that its clickable
-        this.pauseAnimationButton.on('pointerover', () => {
-            this.pauseAnimationButton.setTint(0xf0ff00);
-        });
-        this.pauseAnimationButton.on('pointerout', () =>{
-            this.pauseAnimationButton.setTint(0xffffff);
-        });
-        //handle on click
+        
+        this.pauseAnimationButton = this.createTextButton(100, 90+100, "Pause animation");
+            
         this.pauseAnimationButton.on('pointerdown', () => {
             this.currentAnimation.pauseOnNextNode();
         }); 
 
-        var unpauseAnimationButtonText = "Unpause animation";
-        this.unpauseAnimationButton = this.add.text(100, 90+200, unpauseAnimationButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
-        //change color on hover to indicate that its clickable
-        this.unpauseAnimationButton.on('pointerover', () => {
-            this.unpauseAnimationButton.setTint(0xf0ff00);
-        });
-        this.unpauseAnimationButton.on('pointerout', () =>{
-            this.unpauseAnimationButton.setTint(0xffffff);
-        });
-        //handle on click
+        
+        this.unpauseAnimationButton = this.createTextButton(100, 90+200, "Unpause animation");
+        
         this.unpauseAnimationButton.on('pointerdown', () => {
             this.currentAnimation.resume();
         }); 
-        var pauseOnNewNodeButtonText = "Pause At next node in traversal path";
-        this.pauseOnNewNodeButton = this.add.text(100, 90+300, pauseOnNewNodeButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
-        //change color on hover to indicate that its clickable
-        this.pauseOnNewNodeButton.on('pointerover', () => {
-            this.pauseOnNewNodeButton.setTint(0xf0ff00);
-        });
-        this.pauseOnNewNodeButton.on('pointerout', () =>{
-            this.pauseOnNewNodeButton.setTint(0xffffff);
-        });
-        //handle on click
+
+
+        this.pauseOnNewNodeButton = this.createTextButton(100, 90+300, "Pause At next node in traversal path");
+        
         this.pauseOnNewNodeButton.on('pointerdown', () => {
             this.currentAnimation.pauseOnNextNodeInTravesalPath();
         }); 
+
+    }
+    
+    createTextButton(xPos,yPos,buttonText){
+        let textButton = this.add.text(xPos, yPos, buttonText, { fontFamily: '"Helvetica"' }).setInteractive();
+        //change color on hover to indicate that its clickable
+        textButton.on('pointerover', () => {
+            textButton.setTint(0xf0ff00);
+        });
+        textButton.on('pointerout', () =>{
+            textButton.setTint(0xffffff);
+        });
+
+        return(textButton);
+        
     }
 
     runAnimation(){
