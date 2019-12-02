@@ -108,9 +108,11 @@ export default class Scene1 extends Phaser.Scene {
         // var Animation1 = new InorderAnimation(this,
 				// 	                                    this.MainTree,
         //                                       player);
-        var Animation2 = new BFSAnimation(this,
-					                                this.MainTree,
-                                          player);
+
+        var Animation2 = new TravelAnimation(this,
+					                                   this.MainTree,
+                                             player,
+                                             TravelAnimation.BFSAnimation);
         this.currentAnimation = Animation2;
         Animation2.play();
     }

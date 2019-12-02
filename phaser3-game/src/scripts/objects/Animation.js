@@ -6,23 +6,18 @@ export class TravelAnimation {
     constructor(scene,
                 binarySearchTree,
                 player,
-                //list of nodes in order of where player will go
-                nodePath) {
+                traversalType
+               ) {
 
-        
-        //this is just the results of the default traversal algorithm I will
-        //change the player's path to travel to these nodes using only parent
-        //and child pointers in order to not break walls
-        this.nodesToTraverse = nodePath;
+
 
         this.player = player;
-
-        //TODO I'm not sure a scene can be used as a property it may cause an error later
-        this.scene = scene;
         this.binarySearchTree = binarySearchTree;
         this.playerWaitTimeAtNode = "+=500m";
         this.timeToTravelBetweenCaves = 1000;
         this.playerAnimationTimeline = null;
+        //TODO I'm not sure a scene can be used as a property it may cause an error later
+        this.scene = scene;
 
         //when the handleTweenEnd funtion is called, this will cause it to
         //dont pause immediately or else the cave digger will stop in the middle of a tunnel
@@ -33,15 +28,35 @@ export class TravelAnimation {
         // [firstNode,(intermediate nodes so it doesn't go through walls), secondNode]
         this.stopOnNextTraversalNode = false;
 
+        //list of nodes in order of where player will go
+        var nodePath;
+        switch (traversalType) {
+
+        case TravelAnimation.BFSAnimation:
+          nodePath = binarySearchTree.bfs();
+          break;
+
+        case TravelAnimation.InorderAnimation:
+          nodePath = binarySearchTree.getNodesInOrder();
+          break;
+
+        default:
+          throw "ERROR; animation type not found";
+        }
+
+        this.nodesToTraverse = nodePath;
 
         this.nextNodeToTraverseTo = nodePath[0];
         
-        this.initializePath(nodePath);
+        this.createAnimationPath(nodePath);
 
         this.handleTweenEnd = this.handleTweenEnd.bind(this);
+        this.createAnimationPath = this.createAnimationPath.bind(this);
 
     }
-    initializePath(nodePath) {
+
+   
+    createAnimationPath(nodePath) {
 
         var nodePositionArray = [];
 
@@ -69,7 +84,7 @@ export class TravelAnimation {
                 x : nodePositionArray[i][0],
                 y : nodePositionArray[i][1],
                 offset : this.playerWaitTimeAtNode,
-                //when the fucntion stopps it will run the follow 
+                //when the function stops it will run this 
                 onComplete : this.handleTweenEnd,
                 onCompleteParams : [this,nodePath[i]] 
             };
@@ -123,33 +138,6 @@ export class TravelAnimation {
     }
 }
 
-
-export class BFSAnimation extends TravelAnimation {
-
-    constructor(scene,
-                binarySearchTree,
-                player) {
-
-        let nodePath = binarySearchTree.bfs();
-        super(scene,
-              binarySearchTree,
-              player,
-              nodePath);
-
-    }
-}
-
-export class InorderAnimation extends TravelAnimation {
-
-    constructor(scene,
-                binarySearchTree,
-                player) {
-
-        let nodePath = binarySearchTree.getNodesInOrder();
-        super(scene,
-              binarySearchTree,
-              player,
-             nodePath);
-
-    }
-}
+//declare static variables
+TravelAnimation.BFSAnimation = 1;
+TravelAnimation.InorderAnimation = 2;
