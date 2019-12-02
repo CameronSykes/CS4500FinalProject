@@ -43,24 +43,9 @@ export default class Scene1 extends Phaser.Scene {
 
 
         this.initializeBST();
-
         this.initializeAllCaves();
         this.initializeMenuItems();
 
-        // pausing when i press left; start when i press right to debug 
-        this.input.keyboard.on('keydown', function (event) {
-            
-            if (event.keyCode === 37)
-            {
-                //  left
-                this.currentAnimation.resume();
-            }
-            else if (event.keyCode === 39)
-            {
-                this.currentAnimation.pauseOnNextNode();
-                //  right
-            }
-        },this);
 
 
     }
@@ -68,8 +53,8 @@ export default class Scene1 extends Phaser.Scene {
     }
     // this creates items that will let the user start and stop 
     initializeMenuItems(){
-        var startButtonText = "Hello World";
-        this.startAnimationButton = this.add.text(100, 90, startButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
+        var startAnimationButtonText = "Start animation";
+        this.startAnimationButton = this.add.text(100, 90, startAnimationButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
         //change color on hover to indicate that its clickable
         this.startAnimationButton.on('pointerover', () => {
             this.startAnimationButton.setTint(0xf0ff00);
@@ -79,10 +64,40 @@ export default class Scene1 extends Phaser.Scene {
         });
         //handle on click
         this.startAnimationButton.on('pointerdown', () => {
-             
             this.runAnimation(); 
         }); 
+
+
+
+        var pauseAnimationButtonText = "Pause animation";
+        this.pauseAnimationButton = this.add.text(100, 90+100, pauseAnimationButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
+        //change color on hover to indicate that its clickable
+        this.pauseAnimationButton.on('pointerover', () => {
+            this.pauseAnimationButton.setTint(0xf0ff00);
+        });
+        this.pauseAnimationButton.on('pointerout', () =>{
+            this.pauseAnimationButton.setTint(0xffffff);
+        });
+        //handle on click
+        this.pauseAnimationButton.on('pointerdown', () => {
+            this.currentAnimation.pauseOnNextNode();
+        }); 
+
+        var unpauseAnimationButtonText = "Unpause animation";
+        this.unpauseAnimationButton = this.add.text(100, 90+200, unpauseAnimationButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
+        //change color on hover to indicate that its clickable
+        this.unpauseAnimationButton.on('pointerover', () => {
+            this.unpauseAnimationButton.setTint(0xf0ff00);
+        });
+        this.unpauseAnimationButton.on('pointerout', () =>{
+            this.unpauseAnimationButton.setTint(0xffffff);
+        });
+        //handle on click
+        this.unpauseAnimationButton.on('pointerdown', () => {
+            this.currentAnimation.resume();
+        }); 
     }
+
     runAnimation(){
         let playerStartXpos =  0;
         let playerStartYpos =  100;
