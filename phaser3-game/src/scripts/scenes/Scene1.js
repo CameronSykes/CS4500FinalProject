@@ -57,35 +57,38 @@ export default class Scene1 extends Phaser.Scene {
     // this creates items that will let the user start and stop 
     initializeMenuItems(){
         
-        this.startAnimationButton = this.createTextButton(100, 90, "Start animation");
-        //handle on click
-        this.startAnimationButton.on('pointerdown', () => {
-            this.runAnimation(); 
-        }); 
+        this.startAnimationButton = this.createTextButton(100,
+                                                          90,
+                                                          "Start BFS animation",
+                                                          () => {
+                                                              this.runAnimation(TravelAnimation.BFSAnimation); 
+                                                          });
         
-        this.pauseAnimationButton = this.createTextButton(100, 90+100, "Pause animation");
+        this.pauseAnimationButton = this.createTextButton(100,
+                                                          90+100,
+                                                          "Pause animation",
+                                                          () => {
+                                                              this.currentAnimation.pauseOnNextNode();
+                                                          });
             
-        this.pauseAnimationButton.on('pointerdown', () => {
-            this.currentAnimation.pauseOnNextNode();
-        }); 
-
         
-        this.unpauseAnimationButton = this.createTextButton(100, 90+200, "Unpause animation");
+        this.unpauseAnimationButton = this.createTextButton(100,
+                                                            90+200,
+                                                            "Unpause animation",
+                                                            () => {
+                                                                this.currentAnimation.resume();
+                                                            });
         
-        this.unpauseAnimationButton.on('pointerdown', () => {
-            this.currentAnimation.resume();
-        }); 
-
-
-        this.pauseOnNewNodeButton = this.createTextButton(100, 90+300, "Pause At next node in traversal path");
+        this.pauseOnNewNodeButton = this.createTextButton(100,
+                                                          90+300,
+                                                          "Pause At next node in traversal path",
+                                                          () => {
+                                                              this.currentAnimation.pauseOnNextNodeInTravesalPath();
+                                                          });
         
-        this.pauseOnNewNodeButton.on('pointerdown', () => {
-            this.currentAnimation.pauseOnNextNodeInTravesalPath();
-        }); 
-
     }
     
-    createTextButton(xPos,yPos,buttonText){
+    createTextButton(xPos,yPos,buttonText,onClickFuction){
         let textButton = this.add.text(xPos, yPos, buttonText, { fontFamily: '"Helvetica"' }).setInteractive();
         //change color on hover to indicate that its clickable
         textButton.on('pointerover', () => {
@@ -95,11 +98,13 @@ export default class Scene1 extends Phaser.Scene {
             textButton.setTint(0xffffff);
         });
 
+        textButton.on('pointerdown', onClickFuction); 
+
         return(textButton);
         
     }
 
-    runAnimation(){
+    runAnimation(AnimationType){
         let playerStartXpos =  0;
         let playerStartYpos =  100;
 
@@ -112,7 +117,7 @@ export default class Scene1 extends Phaser.Scene {
         var Animation2 = new TravelAnimation(this,
 					                                   this.MainTree,
                                              player,
-                                             TravelAnimation.BFSAnimation);
+                                             AnimationType);
         this.currentAnimation = Animation2;
         Animation2.play();
     }
