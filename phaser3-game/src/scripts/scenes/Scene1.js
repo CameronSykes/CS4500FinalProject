@@ -19,6 +19,7 @@ export default class Scene1 extends Phaser.Scene {
 
         //the 'this' keyword changes based on what function calls it
         //this makes this keyword bind to Scene1 instance always in the following instance methods 
+        this.initializeMenuItems = this.initializeMenuItems.bind(this);
         this.runAnimation = this.runAnimation.bind(this);
     }
     init(data) {}
@@ -44,7 +45,9 @@ export default class Scene1 extends Phaser.Scene {
         this.initializeBST();
 
         this.initializeAllCaves();
+        this.initializeMenuItems();
 
+        // pausing when i press left; start when i press right to debug 
         this.input.keyboard.on('keydown', function (event) {
             
             if (event.keyCode === 37)
@@ -63,7 +66,23 @@ export default class Scene1 extends Phaser.Scene {
     }
     update(time, delta) {
     }
-
+    // this creates items that will let the user start and stop 
+    initializeMenuItems(){
+        var startButtonText = "Hello World";
+        this.startAnimationButton = this.add.text(100, 90, startButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
+        //change color on hover to indicate that its clickable
+        this.startAnimationButton.on('pointerover', () => {
+            this.startAnimationButton.setTint(0xf0ff00);
+        });
+        this.startAnimationButton.on('pointerout', () =>{
+            this.startAnimationButton.setTint(0xffffff);
+        });
+        //handle on click
+        this.startAnimationButton.on('pointerdown', () => {
+             
+            this.runAnimation(); 
+        }); 
+    }
     runAnimation(){
         let playerStartXpos =  0;
         let playerStartYpos =  100;

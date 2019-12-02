@@ -64,12 +64,12 @@ export class TravelAnimation {
             this.playerAnimationTimeline.play();
     }
 
-    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
-    //  Following this comes whatever you specify in the params array (in this case cave)
     updateTouchedCave(cave) {
         //add a layer of color on top of image
          cave.tint = 0xff00ff;
     }
+    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
+    //  Following this comes whatever you specify in the params array (in this case cave)
     //animationObject has to be sent becuase it wll be called from another object and won't be able to access the parent animation
     handleTweenEnd(sprite, animation, animationObject, cave) {
         if(animationObject.canContinue == true){
