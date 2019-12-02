@@ -96,6 +96,19 @@ export default class Scene1 extends Phaser.Scene {
         this.unpauseAnimationButton.on('pointerdown', () => {
             this.currentAnimation.resume();
         }); 
+        var pauseOnNewNodeButtonText = "Pause At next node in traversal path";
+        this.pauseOnNewNodeButton = this.add.text(100, 90+300, pauseOnNewNodeButtonText, { fontFamily: '"Roboto Condensed"' }).setInteractive();
+        //change color on hover to indicate that its clickable
+        this.pauseOnNewNodeButton.on('pointerover', () => {
+            this.pauseOnNewNodeButton.setTint(0xf0ff00);
+        });
+        this.pauseOnNewNodeButton.on('pointerout', () =>{
+            this.pauseOnNewNodeButton.setTint(0xffffff);
+        });
+        //handle on click
+        this.pauseOnNewNodeButton.on('pointerdown', () => {
+            this.currentAnimation.pauseOnNextNodeInTravesalPath();
+        }); 
     }
 
     runAnimation(){

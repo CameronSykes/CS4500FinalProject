@@ -8,15 +8,34 @@ export class TravelAnimation {
                 player,
                 //list of nodes in order of where player will go
                 nodePath) {
-        //TODO Note a scene cannot be used as a property it will it will cuase an error later
+
+        
+        //this is just the results of the default traversal algorithm I will
+        //change the player's path to travel to these nodes using only parent
+        //and child pointers in order to not break walls
+        this.nodesToTraverse = nodePath;
+
         this.player = player;
+
+        //TODO I'm not sure a scene can be used as a property it may cause an error later
         this.scene = scene;
         this.binarySearchTree = binarySearchTree;
         this.playerWaitTimeAtNode = "+=500m";
         this.timeToTravelBetweenCaves = 1000;
         this.playerAnimationTimeline = null;
+
+        //when the handleTweenEnd funtion is called, this will cause it to
+        //dont pause immediately or else the cave digger will stop in the middle of a tunnel
         this.canContinue = true;
 
+        //this will stop when it reaches the next node in the traversal algroithm
+        //(BFS, DFS). This is so it doesn't stop on an intermediate node
+        // [firstNode,(intermediate nodes so it doesn't go through walls), secondNode]
+        this.stopOnNextTraversalNode = false;
+
+
+        this.nextNodeToTraverseTo = nodePath[0];
+        
         this.initializePath(nodePath);
 
         this.handleTweenEnd = this.handleTweenEnd.bind(this);
@@ -52,7 +71,7 @@ export class TravelAnimation {
                 offset : this.playerWaitTimeAtNode,
                 //when the fucntion stopps it will run the follow 
                 onComplete : this.handleTweenEnd,
-                onCompleteParams : [this,nodePath[i].cave] 
+                onCompleteParams : [this,nodePath[i]] 
             };
 
             this.playerAnimationTimeline.add(tweenBuilderConfig);
@@ -70,30 +89,39 @@ export class TravelAnimation {
     }
     //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
     //  Following this comes whatever you specify in the params array (in this case cave)
-    //animationObject has to be sent becuase it wll be called from another object and won't be able to access the parent animation
-    handleTweenEnd(sprite, animation, animationObject, cave) {
-        if(animationObject.canContinue == true){
-            animationObject.playerAnimationTimeline.resume();
+    //animationObject has to be sent becuase it wll be called from another object and won't be able to access the parent animation (TravelAnimation)
+    handleTweenEnd(sprite, animation, travelAnimationObject, currentNode) {
+        if(currentNode == travelAnimationObject.nextNodeToTraverseTo){
+            travelAnimationObject.nodesToTraverse.splice(0,1); 
+            travelAnimationObject.nextNodeToTraverseTo = travelAnimationObject.nodesToTraverse[0];
+
+            if(travelAnimationObject.stopOnNextTraversalNode){
+                travelAnimationObject.canContinue = false; 
+            }
+        }
+        if(travelAnimationObject.canContinue){
+            travelAnimationObject.playerAnimationTimeline.resume();
         }
         else{
-            animationObject.playerAnimationTimeline.pause();
+            travelAnimationObject.playerAnimationTimeline.pause();
         }
-        animationObject.updateTouchedCave(cave);
+        travelAnimationObject.updateTouchedCave(currentNode.cave);
     }
 
-    //when the handleTweenEnd funtion is called this will cause it to
-    //dont pause immediately or else the cave digger will stop in the middle of a tunnel
     pauseOnNextNode(){
-        console.log("pause");
         this.canContinue = false;
+    }
+    pauseOnNextNodeInTravesalPath(){
+        console.log("pause");
+        this.stopOnNextTraversalNode = true;
     }
     resume(){
         console.log("continue");
+        this.stopOnNextTraversalNode = false;
         this.canContinue = true;
         this.playerAnimationTimeline.resume();
     }
 }
-
 
 
 export class BFSAnimation extends TravelAnimation {
