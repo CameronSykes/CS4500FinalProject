@@ -35,9 +35,10 @@ export default class Scene1 extends Phaser.Scene {
         this.createTextButton = this.createTextButton.bind(this);
         this.askNextQuizQuestion = this.askNextQuizQuestion.bind(this);
         this.startQuiz = this.startQuiz.bind(this);
+
+        this.handleQuizAnswer = this.handleQuizAnswer.bind(this);
+        this.handleCaveClick = this.handleCaveClick.bind(this);
     }
-    //TODO delete this.
-    init(data) {}
 
     //load assests used
     preload () {
@@ -174,26 +175,30 @@ export default class Scene1 extends Phaser.Scene {
 
     handleCaveClick(clickedCave){
         if(this.isQuizRunning){
-            //the next node is clicked
-            if(clickedCave.node == this.currentTraversal[this.currentTraversalNodeIndex + 1]){
-                //unpause the quiz
-                this.currentAnimation.resume();
-                this.quizOutputTextBox.text = "Correct Node clicked";
-                this.quizOutputTextBox.setTint(green);
-                this.currentTraversalNodeIndex+=1;
-                
-                if(this.currentTraversalNodeIndex == this.currentTraversal.length -1){
-                    this.quizOutputTextBox.text = "Quiz Complete";
-                    this.quizOutputTextBox.setTint(green);
-                    return;
-                }
-                this.time.addEvent({ delay: 1000, callback: this.askNextQuizQuestion, callbackScope: this });}
-            else{
-                this.quizOutputTextBox.text = "Incorrect Node clicked: Please try gain";
-                this.quizOutputTextBox.setTint(gray);
-            }
+            this.handleQuizAnswer(clickedCave);
         }
     }
+    handleQuizAnswer(clickedCave){
+        //the next node is clicked
+        if(clickedCave.node == this.currentTraversal[this.currentTraversalNodeIndex + 1]){
+            //unpause the quiz
+            this.currentAnimation.resume();
+            this.quizOutputTextBox.text = "Correct Node clicked";
+            this.quizOutputTextBox.setTint(green);
+            this.currentTraversalNodeIndex+=1;
+            
+            if(this.currentTraversalNodeIndex == this.currentTraversal.length -1){
+                this.quizOutputTextBox.text = "Quiz Complete";
+                this.quizOutputTextBox.setTint(green);
+                return;
+            }
+            this.time.addEvent({ delay: 1000, callback: this.askNextQuizQuestion, callbackScope: this });}
+        else{
+            this.quizOutputTextBox.text = "Incorrect Node clicked: Please try gain";
+            this.quizOutputTextBox.setTint(gray);
+        }
+    }
+    
     askNextQuizQuestion(){
         this.quizOutputTextBox.text = "What is the next node?";
         this.quizOutputTextBox.setTint(white);
