@@ -22,6 +22,7 @@ export class Cave extends Phaser.GameObjects.Sprite {
 
         this.content = inputNode.content;
         
+        this.node = inputNode;
         
         this.scene = inputScene;
         this.xCoord = inputXCoord;
@@ -44,18 +45,15 @@ export class Cave extends Phaser.GameObjects.Sprite {
     makeClickable(){
         this.setInteractive();
 
-        this.on('pointerup', this.onObjectClicked);
+        this.on('pointerup', this.onCaveClicked);
     }
 
 
     //handle clicks it takes a pointer becuase it needs  the mouse pointer that clicked it
-    onObjectClicked(pointer)
+    onCaveClicked(pointer)
     {
-        //add a layer of color on top of image
-
-        this.tint = 0x30000f;
+        this.scene.handleCaveClick(this);
         
-        this.scene.handleCaveClick();
     }
         
     

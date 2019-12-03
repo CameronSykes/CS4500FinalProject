@@ -4,8 +4,12 @@ import { Player } from '../objects/Player.js';
 import { Cave } from '../objects/Cave.js';
 import { TravelAnimation, BFSAnimation, InorderAnimation  } from '../objects/Animation.js';
 
-
-//In my opinon a Scene brings everything together and that's it
+//store as hex
+const white = 0xffffff;
+const red = 0xff0000;
+const green = 0x00ff00;
+const yellow = 0xf0ff00;
+const gray = 0xd3d3d3;
 
 export default class Scene1 extends Phaser.Scene {
     constructor () {
@@ -16,14 +20,26 @@ export default class Scene1 extends Phaser.Scene {
         this.valList = [];
 
         this.currentAnimation = null;
+        this.currentTraversal = null;
+
+        this.currentTraversalNodeIndex = 0;
+
+        this.isQuizRunning = false;
+
+        this.quizOutputTextBox = null;
 
         //the 'this' keyword changes based on what function calls it
         //this makes this keyword bind to Scene1 instance always in the following instance methods 
         this.initializeMenuItems = this.initializeMenuItems.bind(this);
         this.runAnimation = this.runAnimation.bind(this);
         this.createTextButton = this.createTextButton.bind(this);
+        this.askNextQuizQuestion = this.askNextQuizQuestion.bind(this);
+        this.startQuiz = this.startQuiz.bind(this);
+
+        this.handleQuizAnswer = this.handleQuizAnswer.bind(this);
+        this.handleCaveClick = this.handleCaveClick.bind(this);
     }
-    init(data) {}
+
     //load assests used
     preload () {
         //the directory is relative to the index.html file or whichever html
@@ -50,9 +66,30 @@ export default class Scene1 extends Phaser.Scene {
         this.initializeMenuItems();
 
 
-
+        this.quizOutputTextBox = this.add.text(500, 500, "", { fontFamily: '"Helvetica"' });
+        this.quizOutputTextBox.setVisible(false);
     }
+
+ 
+    //this runs on every frame 
     update(time, delta) {
+    }
+
+    startQuiz(traversalType){
+        this.runAnimation(traversalType); 
+        if(traversalType == TravelAnimation.BFSAnimation){
+            this.currentTraversal = this.MainTree.bfs();
+        }
+        else if (traversalType == TravelAnimation.InorderAnimation) {
+                this.currentTraversal = this.MainTree.getNodesInOrder();
+        }
+        
+        this.quizOutputTextBox.text = "Quiz started: \nSelect the next node that will be traversed";
+        this.quizOutputTextBox.setTint(white);
+        this.quizOutputTextBox.setVisible(true);
+
+        this.currentAnimation.pauseOnNextNode();
+        this.isQuizRunning = true;
     }
     // this creates items that will let the user start and stop 
     initializeMenuItems(){
@@ -63,7 +100,21 @@ export default class Scene1 extends Phaser.Scene {
                                                           () => {
                                                               this.runAnimation(TravelAnimation.BFSAnimation); 
                                                           });
+        this.startQuizButton = this.createTextButton(600,
+                                                     90,
+                                                     "Start BFS Quiz",
+                                                     () => {
+                                                         this.startQuiz(TravelAnimation.BFSAnimation); 
+                                                     });
+
+        this.startAnimationButton = this.createTextButton(100,
+                                                          90+50,
+                                                          "Start Inorder animation",
+                                                          () => {
+                                                              this.runAnimation(TravelAnimation.InorderAnimation); 
+                                                          });
         
+ 
         this.pauseAnimationButton = this.createTextButton(100,
                                                           90+100,
                                                           "Pause animation",
@@ -79,7 +130,7 @@ export default class Scene1 extends Phaser.Scene {
                                                                 this.currentAnimation.resume();
                                                             });
         
-        this.pauseOnNewNodeButton = this.createTextButton(100,
+        this.pauseOnNextNodeInTravesalPath = this.createTextButton(100,
                                                           90+300,
                                                           "Pause At next node in traversal path",
                                                           () => {
@@ -92,10 +143,10 @@ export default class Scene1 extends Phaser.Scene {
         let textButton = this.add.text(xPos, yPos, buttonText, { fontFamily: '"Helvetica"' }).setInteractive();
         //change color on hover to indicate that its clickable
         textButton.on('pointerover', () => {
-            textButton.setTint(0xf0ff00);
+            textButton.setTint(yellow);
         });
         textButton.on('pointerout', () =>{
-            textButton.setTint(0xffffff);
+            textButton.setTint(white);
         });
 
         textButton.on('pointerdown', onClickFuction); 
@@ -122,10 +173,37 @@ export default class Scene1 extends Phaser.Scene {
         Animation2.play();
     }
 
-    handleCaveClick(){
-        this.runAnimation(); 
+    handleCaveClick(clickedCave){
+        if(this.isQuizRunning){
+            this.handleQuizAnswer(clickedCave);
+        }
     }
-
+    handleQuizAnswer(clickedCave){
+        //the next node is clicked
+        if(clickedCave.node == this.currentTraversal[this.currentTraversalNodeIndex + 1]){
+            //unpause the quiz
+            this.currentAnimation.resume();
+            this.quizOutputTextBox.text = "Correct Node clicked";
+            this.quizOutputTextBox.setTint(green);
+            this.currentTraversalNodeIndex+=1;
+            
+            if(this.currentTraversalNodeIndex == this.currentTraversal.length -1){
+                this.quizOutputTextBox.text = "Quiz Complete";
+                this.quizOutputTextBox.setTint(green);
+                return;
+            }
+            this.time.addEvent({ delay: 1000, callback: this.askNextQuizQuestion, callbackScope: this });}
+        else{
+            this.quizOutputTextBox.text = "Incorrect Node clicked: Please try gain";
+            this.quizOutputTextBox.setTint(gray);
+        }
+        
+    }
+    askNextQuizQuestion(){
+        this.quizOutputTextBox.text = "What is the next node?";
+        this.quizOutputTextBox.setTint(white);
+        this.currentAnimation.pauseOnNextNodeInTravesalPath();
+    }
     //Delete this comment
     //Up to Cameron to decide what this does right now it initializes nodes x,y
     //coordinates manually
