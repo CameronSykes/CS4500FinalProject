@@ -6,21 +6,57 @@ export class TravelAnimation {
     constructor(scene,
                 binarySearchTree,
                 player,
-                //list of nodes in order of where player will go
-                nodePath) {
-        //TODO Note a scene cannot be used as a property it will it will cuase an error later
+                traversalType
+               ) {
+
+
+
         this.player = player;
-        this.scene = scene;
         this.binarySearchTree = binarySearchTree;
         this.playerWaitTimeAtNode = "+=500m";
         this.timeToTravelBetweenCaves = 1000;
         this.playerAnimationTimeline = null;
-        this.newNodeList = null;
+        //TODO I'm not sure a scene can be used as a property it may cause an error later
+        this.scene = scene;
 
-        this.initializePath(nodePath);
+        //when the handleTweenEnd funtion is called, this will cause it to
+        //dont pause immediately or else the cave digger will stop in the middle of a tunnel
+        this.canContinue = true;
+
+        //this will stop when it reaches the next node in the traversal algroithm
+        //(BFS, DFS). This is so it doesn't stop on an intermediate node
+        // [firstNode,(intermediate nodes so it doesn't go through walls), secondNode]
+        this.stopOnNextTraversalNode = false;
+
+        //list of nodes in order of where player will go
+        var nodePath;
+        switch (traversalType) {
+
+        case TravelAnimation.BFSAnimation:
+          nodePath = binarySearchTree.bfs();
+          break;
+
+        case TravelAnimation.InorderAnimation:
+          nodePath = binarySearchTree.getNodesInOrder();
+          break;
+
+        default:
+          throw "ERROR; animation type not found";
+        }
+
+        this.nodesToTraverse = nodePath;
+
+        this.nextNodeToTraverseTo = nodePath[0];
+
+        this.createAnimationPath(nodePath);
+
+        this.handleTweenEnd = this.handleTweenEnd.bind(this);
+        this.createAnimationPath = this.createAnimationPath.bind(this);
 
     }
-    initializePath(nodePath) {
+
+
+    createAnimationPath(nodePath) {
 
         var nodePositionArray = [];
 
@@ -48,9 +84,9 @@ export class TravelAnimation {
                 x : nodePositionArray[i][0],
                 y : nodePositionArray[i][1],
                 offset : this.playerWaitTimeAtNode,
-                //when the fucntion stopps it will run the follow 
-                onComplete : this.updateTouchedNode,
-                onCompleteParams : [nodePath[i].cave] 
+                //when the function stops it will run this 
+                onComplete : this.handleTweenEnd,
+                onCompleteParams : [this,nodePath[i]] 
             };
 
             this.playerAnimationTimeline.add(tweenBuilderConfig);
@@ -59,48 +95,49 @@ export class TravelAnimation {
     }
 
     play(){
-        //run all tween animations
-        this.playerAnimationTimeline.play();
+            this.playerAnimationTimeline.play();
     }
 
-    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
-    //  Following this comes whatever you specify in the params array (in this case cave)
-    updateTouchedNode(sprite, animation, cave) {
+    updateTouchedCave(cave) {
         //add a layer of color on top of image
          cave.tint = 0xff00ff;
     }
+    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
+    //  Following this comes whatever you specify in the params array (in this case cave)
+    //animationObject has to be sent becuase it wll be called from another object and won't be able to access the parent animation (TravelAnimation)
+    handleTweenEnd(sprite, animation, travelAnimationObject, currentNode) {
+        if(currentNode == travelAnimationObject.nextNodeToTraverseTo){
+            travelAnimationObject.nodesToTraverse.splice(0,1); 
+            travelAnimationObject.nextNodeToTraverseTo = travelAnimationObject.nodesToTraverse[0];
 
+            if(travelAnimationObject.stopOnNextTraversalNode){
+                travelAnimationObject.canContinue = false; 
+            }
+        }
+        if(travelAnimationObject.canContinue){
+            travelAnimationObject.playerAnimationTimeline.resume();
+        }
+        else{
+            travelAnimationObject.playerAnimationTimeline.pause();
+        }
+        travelAnimationObject.updateTouchedCave(currentNode.cave);
+    }
 
-}
-
-
-
-export class BFSAnimation extends TravelAnimation {
-
-    constructor(scene,
-                binarySearchTree,
-                player) {
-
-        let nodePath = binarySearchTree.bfs();
-        super(scene,
-              binarySearchTree,
-              player,
-              nodePath);
-
+    pauseOnNextNode(){
+        this.canContinue = false;
+    }
+    pauseOnNextNodeInTravesalPath(){
+        console.log("pause");
+        this.stopOnNextTraversalNode = true;
+    }
+    resume(){
+        console.log("continue");
+        this.stopOnNextTraversalNode = false;
+        this.canContinue = true;
+        this.playerAnimationTimeline.resume();
     }
 }
 
-export class InorderAnimation extends TravelAnimation {
-
-    constructor(scene,
-                binarySearchTree,
-                player) {
-
-        let nodePath = binarySearchTree.getNodesInOrder();
-        super(scene,
-              binarySearchTree,
-              player,
-             nodePath);
-
-    }
-}
+//declare static variables
+TravelAnimation.BFSAnimation = 1;
+TravelAnimation.InorderAnimation = 2;
