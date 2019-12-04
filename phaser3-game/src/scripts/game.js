@@ -2,7 +2,7 @@ import 'phaser';
 import '@babel/polyfill';
 
 import Scene1 from './scenes/Scene1.js';
-import PreloadScene from './scenes/preloadScene';
+
 
 var platform;
 var screenWidth = 800;

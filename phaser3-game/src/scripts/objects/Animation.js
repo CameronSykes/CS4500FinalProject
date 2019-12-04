@@ -47,7 +47,7 @@ export class TravelAnimation {
         this.nodesToTraverse = nodePath;
 
         this.nextNodeToTraverseTo = nodePath[0];
-        
+
         this.createAnimationPath(nodePath);
 
         this.handleTweenEnd = this.handleTweenEnd.bind(this);
@@ -55,7 +55,7 @@ export class TravelAnimation {
 
     }
 
-   
+
     createAnimationPath(nodePath) {
 
         var nodePositionArray = [];

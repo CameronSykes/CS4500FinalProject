@@ -186,7 +186,7 @@ export default class Scene1 extends Phaser.Scene {
             this.quizOutputTextBox.text = "Correct Node clicked";
             this.quizOutputTextBox.setTint(green);
             this.currentTraversalNodeIndex+=1;
-            
+
             if(this.currentTraversalNodeIndex == this.currentTraversal.length -1){
                 this.quizOutputTextBox.text = "Quiz Complete";
                 this.quizOutputTextBox.setTint(green);
@@ -194,7 +194,7 @@ export default class Scene1 extends Phaser.Scene {
             }
             this.time.addEvent({ delay: 1000, callback: this.askNextQuizQuestion, callbackScope: this });}
         else{
-            this.quizOutputTextBox.text = "Incorrect Node clicked: Please try gain";
+            this.quizOutputTextBox.text = "Incorrect Node clicked: Please try again";
             this.quizOutputTextBox.setTint(gray);
         }
     }
@@ -251,6 +251,39 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     initializeAllCaves(){
+        //set line style
+        var graphics = this.add.graphics({ lineStyle: { width: 4, color: gray }, fillStyle: { color: gray } });
+        var connectionLineList = [];
+        for (let i = 0; i<this.valList.length; i++)
+        {
+            let posNode = this.MainTree.getNodeFromContent(this.valList[i]);
+            if(posNode.leftChild){
+
+                connectionLineList.push(
+                    new Phaser.Geom.Line(posNode.getxCoord(),
+                                         posNode.getyCoord(),
+                                         posNode.leftChild.getxCoord(),
+                                         posNode.leftChild.getyCoord())
+                );
+                //draw line
+                graphics.strokeLineShape(connectionLineList[connectionLineList.length-1]);
+
+            }
+            if(posNode.rightChild){
+                connectionLineList.push(
+                    new Phaser.Geom.Line(posNode.getxCoord(),
+                                         posNode.getyCoord(),
+                                         posNode.rightChild.getxCoord(),
+                                         posNode.rightChild.getyCoord())
+                );
+                //draw line
+                graphics.strokeLineShape(connectionLineList[connectionLineList.length-1]);
+
+            }
+
+
+        }
+
 
         //elements such as nodes on a tree are stored as groups
         //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
