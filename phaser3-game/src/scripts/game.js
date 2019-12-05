@@ -5,8 +5,8 @@ import Scene1 from './scenes/Scene1.js';
 import PreloadScene from './scenes/preloadScene';
 
 var platform;
-var screenWidth = 800;
-var screenHeight = 600;
+var screenWidth = 1600;
+var screenHeight = 1200;
 var config =
     {
         type: Phaser.AUTO,

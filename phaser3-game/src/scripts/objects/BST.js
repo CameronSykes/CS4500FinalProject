@@ -3,11 +3,11 @@
 
 
 export class BinarySearchTree
-{ 
+{
     constructor(screenW, caveRadius, kFactor)
     {
         // Root of a binary seach tree does not exist at this pointers
-        //it is initialized in the insert function 
+        // it is initialized in the insert function
         this.root = null;
         //root = new Node(null) would mean the properties should be overridden
         //when a new node is created
@@ -16,6 +16,7 @@ export class BinarySearchTree
         this.screenW = screenW;
         this.caveRadius = caveRadius;
         this.kFactor = kFactor;
+		this.height = 0;
     }
 
     getRootNode() { return this.root; }
@@ -31,7 +32,7 @@ export class BinarySearchTree
             this.root = nodeToInsert;
             this.root.setxCoord(this.screenW/2);
             this.root.setyCoord(this.caveRadius + 10);
-        } 
+        }
         else
         {
             //Start recursively searching for node to insert this new node under
@@ -47,9 +48,10 @@ export class BinarySearchTree
     // Handle traversal down tree to find place to insert new node
     insertNode(curNode, inputNode)
     {
-        // A child node is under a parent node
+		// A child node is under a parent node
         // Get the parent node's y coordinate then decrement by this.kFactor
-        inputNode.setyCoord(curNode.getyCoord() - this.kFactor);
+
+		inputNode.setyCoord(curNode.getyCoord() + this.kFactor);
 
         if(inputNode.content < curNode.content)
         {
@@ -84,8 +86,10 @@ export class BinarySearchTree
             inputNode.parentNode = curNode;
         }
         else { this.insertNode(curNode.rightChild, inputNode); }
+
         return curNode;
     }
+
     bfs()
     {
         let node = this.root;
@@ -94,6 +98,8 @@ export class BinarySearchTree
 
         while(queue.length)
         {
+			this.height += 1;
+			console.log(this.height);
             node= queue.shift();
             if(node.leftChild) queue.push(node.leftChild);
             if(node.rightChild) queue.push(node.rightChild);
@@ -101,29 +107,28 @@ export class BinarySearchTree
         }
 
         return finalData;
-    } 
-    // Helper function 
-    // findMinNode() 
-    // getRootNode() 
+    }
 
     //returns a array of nodes from inorder traversal
     getNodesInOrder() {
         // Traversal algorithm inspired by
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
-        
         var currentNode = this.root;
         var stack = [];
         var nodeArray = [];
-        while (currentNode != null || stack.length != 0){
-            if (currentNode != null) {
+        while (currentNode != null || stack.length != 0)
+		{
+            if (currentNode != null)
+			{
                 // add all leftmost nodes
                 stack.push(currentNode);
                 currentNode = currentNode.leftChild;
             }
-            else if (stack.length != 0) {
+            else if (stack.length != 0)
+			{
                 currentNode = stack.pop();
                 nodeArray.push(currentNode);
-                
+
                 /*
                   This loop pushes the bottom leftmost node to array.
 
@@ -138,39 +143,40 @@ export class BinarySearchTree
         }
         return(nodeArray);
     }
-    
+
     //This does a binary serach and return all nodes in the search path to a node
-    //returns null if node not found (contains end node in path) 
+    //returns null if node not found (contains end node in path)
     getSearchPathFromContent(contentToFind,parentNode){
-        if (parentNode === undefined)
-            parentNode = this.root;
- 
+        if (parentNode === undefined) { parentNode = this.root; }
+
         var listOfTraversedNodes = [];
+
         //if called before first insert
-        while(parentNode != null  && parentNode.content != contentToFind ){
+        while(parentNode != null  && parentNode.content != contentToFind)
+		{
             listOfTraversedNodes.push(parentNode);
-            if(contentToFind < parentNode.content){
-                parentNode = parentNode.leftChild;
-            }
-            else{
-                parentNode = parentNode.rightChild;
-            }
+            if(contentToFind < parentNode.content) { parentNode = parentNode.leftChild; }
+            else{ parentNode = parentNode.rightChild; }
         }
 
-        if (parentNode.content == contentToFind){
+        if (parentNode.content == contentToFind)
+		{
             listOfTraversedNodes.push(parentNode);
-            return(listOfTraversedNodes);   
+            return(listOfTraversedNodes);
         }
 
-        console.log("Error node",contentToFind,"not found"); 
-        return(null); 
+        console.log("Error node",contentToFind,"not found");
+        return(null);
 
     }
+
     //do a binary serach and return all nodes in path
     //returns null if node not found
-    getNodeFromContent(contentToFind){
+    getNodeFromContent(contentToFind)
+	{
         var searchPath = this.getSearchPathFromContent(contentToFind);
-        if(searchPath!=null){
+        if(searchPath!=null)
+		{
             return(searchPath[searchPath.length - 1]);
         }
         return(null);
@@ -181,16 +187,16 @@ export class BinarySearchTree
     getShortestPath(startNode,endNode){
         /* Assume you have a bst like this
            /* //make tree
-           //      5 
-           //    /   \ 
-           //   3     7 
-           //  /  \  /  \ 
-           // 2   4  6   8 
+           //      5
+           //    /   \
+           //   3     7
+           //  /  \  /  \
+           // 2   4  6   8
 
         Take 8 and 2 for example.
 
-        Find the first shared ancsestor node          : 5 
- 
+        Find the first shared ancsestor node          : 5
+
         the shortest path from 8 to 2 is              : 8,7,5,3,2
 
         This algorithm will
@@ -205,19 +211,20 @@ export class BinarySearchTree
         path to 8 : 7 8
         path to 2 : 5 3 2
 
-        8 7 5 3 2 
-        append first path to second 
-
+        8 7 5 3 2
+        append first path to second
         */
- 
+
         var lastSharedAncestor;
 
         var startNodeSearchPathFromRoot = this.getSearchPathFromContent(startNode.content);
         var endNodeSearchPathFromRoot = this.getSearchPathFromContent(endNode.content);
         var shortestPathFromRootLength = Math.min(startNodeSearchPathFromRoot.length,endNodeSearchPathFromRoot.length);
- 
-        for (var i = 0; i < shortestPathFromRootLength; i++) {
-            if(startNodeSearchPathFromRoot[i]  == endNodeSearchPathFromRoot[i]){
+
+        for (var i = 0; i < shortestPathFromRootLength; i++)
+		{
+            if(startNodeSearchPathFromRoot[i]  == endNodeSearchPathFromRoot[i])
+			{
                 lastSharedAncestor = startNodeSearchPathFromRoot[i];
             }
         }
@@ -226,38 +233,44 @@ export class BinarySearchTree
         var startNodeSearchPathFromAncestor = this.getSearchPathFromContent(startNode.content,lastSharedAncestor);
         var endNodeSearchPathFromAncestor = this.getSearchPathFromContent(endNode.content,lastSharedAncestor);
         var shortestPath = Math.min(startNodeSearchPathFromAncestor.length,endNodeSearchPathFromRoot.length);
-        //remove shared parents 
-        for (i = 0; i < shortestPath; i++) {
-            if(startNodeSearchPathFromAncestor[i]  == endNodeSearchPathFromAncestor[i]){
-                startNodeSearchPathFromAncestor.splice(i,1); 
+        //remove shared parents
+        for (i = 0; i < shortestPath; i++)
+		{
+            if(startNodeSearchPathFromAncestor[i]  == endNodeSearchPathFromAncestor[i])
+			{
+                startNodeSearchPathFromAncestor.splice(i,1);
             }
         }
-  
 
         return ( startNodeSearchPathFromAncestor.reverse().concat(endNodeSearchPathFromAncestor) );
     }
-    // make player only go up and down (left|right)Child or parent pointers  
+
+    // make player only go up and down (left|right)Child or parent pointers
     //use shortest path algorithm on all nodes in nodePath and connect them in a sensible way
     //convert a player path [1,0,2] to [1,0,1,2]
-    connectNodesUsingOnlyLinks(nodePath){
+    connectNodesUsingOnlyLinks(nodePath)
+	{
         let newPath = [];
-        for (let i = 0; i < nodePath.length-1; i++) {
-          let shortestPath = this.getShortestPath(nodePath[i],nodePath[i+1]);
-            
-            //the last item in shortest path is the second argument sent 
+        for (let i = 0; i < nodePath.length-1; i++)
+		{
+			let shortestPath = this.getShortestPath(nodePath[i],nodePath[i+1]);
+
+            //the last item in shortest path is the second argument sent
             //the end node is already the next node
-            for (let j = 0; j < shortestPath.length-1; j++) {
+            for (let j = 0; j < shortestPath.length-1; j++)
+			{
                 newPath.push(shortestPath[j]);
-            } 
-        } 
+            }
+        }
+
         //add last node
-        newPath.push(nodePath[nodePath.length -1]); 
+        newPath.push(nodePath[nodePath.length -1]);
         return newPath;
     }
 }
 
-export class Node { 
-    
+export class Node
+{
     constructor(inputContent)
     {
         this.content  = inputContent;
@@ -267,7 +280,8 @@ export class Node {
         this.parentNode = null;
         this.leftChild = null;
         this.rightChild = null;
-        //a cave is the visual representation
+
+		//a cave is the visual representation
         this.cave = null;
     }
 
@@ -283,23 +297,25 @@ export class Node {
 
 //Many functions return a list of node objects, that is not easy see in the console
 //This will print contents of all nodes in a list for debug purposes
-function printNodeListContents(listOfNodes){
+function printNodeListContents(listOfNodes)
+{
     //This will print all node content seperated by spaces instead of newlines
     var singleLineToPrint = "";
-    for (var i = 0; i < listOfNodes.length; i++) {
+    for (var i = 0; i < listOfNodes.length; i++)
+	{
         singleLineToPrint = singleLineToPrint + String(listOfNodes[i].content) + " ";
     }
     console.log(singleLineToPrint);
-}  
+}
 
 /*
 //Test if it works
 //make tree
-//      5 
-//    /   \ 
-//   3     7 
-//  /  \  /  \ 
-// 2   4  6   8 
+//      5
+//    /   \
+//   3     7
+//  /  \  /  \
+// 2   4  6   8
 var MainTree                       = new BinarySearchTree();
 MainTree.insert(5);
 MainTree.insert(3);
