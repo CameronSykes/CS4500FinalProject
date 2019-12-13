@@ -1,69 +1,140 @@
-
-import { Person } from './Person.js';
-import { Cave } from './Cave.js';
-
-//this class managages animatinos for levels
-//the Scene1 class only handles things for it's class
+//this class managages animations for levels
+//the Scene1 class everything handles for the level
 export class TravelAnimation {
 
-    constructor(scene,
-                nodePositionArray,
-                TraversalType) {
-        //it requires a scene to do the animations on
-        
-        //Make list of images
-        var nodeList = [];
+    constructor(scene, binarySearchTree, player, traversalType)
+	{
+        this.player = player;
+        this.binarySearchTree = binarySearchTree;
+        this.playerWaitTimeAtNode = "+=500m";
+        this.timeToTravelBetweenCaves = 1000;
+        this.playerAnimationTimeline = null;
+        //TODO I'm not sure a scene can be used as a property it may cause an error later
+        this.scene = scene;
 
+        //when the handleTweenEnd funtion is called, this will cause it to
+        //dont pause immediately or else the cave digger will stop in the middle of a tunnel
+        this.canContinue = true;
 
+        //this will stop when it reaches the next node in the traversal algroithm
+        //(BFS, DFS). This is so it doesn't stop on an intermediate node
+        // [firstNode,(intermediate nodes so it doesn't go through walls), secondNode]
+        this.stopOnNextTraversalNode = false;
 
-        //elements such as nodes on a tree are stored as groups
-        //https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Group.html
-        var caveGroup = scene.add.group();
-         
-        var caveList = [];
-        var curCave;
-        //create a series of caves sprites
-        //create a series of caves in the node positions
-        for (var i = 0; i < nodePositionArray.length; i++) {
-            curCave = new Cave(scene,
-                                nodePositionArray[i][0],
-                                nodePositionArray[i][1],
-                               "cave",
-                               undefined //TODO place the node it represents
-                               );
-            caveList.push(curCave);
-            caveGroup.add(curCave);
+        //list of nodes in order of where player will go
+        var nodePath;
+        switch (traversalType)
+		{
+
+	        case TravelAnimation.BFSAnimation:
+    	    	nodePath = binarySearchTree.bfs();
+        	  	break;
+
+	        case TravelAnimation.InorderAnimation:
+    		    nodePath = binarySearchTree.getNodesInOrder();
+		        break;
+
+        	default:
+		        throw "ERROR; animation type not found";
         }
+
+        this.nodesToTraverse = nodePath;
+        this.nextNodeToTraverseTo = nodePath[0];
+        this.createAnimationPath(nodePath);
+        this.handleTweenEnd = this.handleTweenEnd.bind(this);
+        this.createAnimationPath = this.createAnimationPath.bind(this);
+
+    }
+
+    createAnimationPath(nodePath)
+	{
+        var nodePositionArray = [];
+
+        //connect nodes to break avoid breaking walls
+        nodePath = this.binarySearchTree.connectNodesUsingOnlyLinks(nodePath);
+
+        for (let i = 0; i < nodePath.length; i++) {
+            nodePositionArray.push([
+                nodePath[i].getxCoord(),
+                nodePath[i].getyCoord()
+            ]);
+        }
+
 
         //a tween is an animation of a sprite moving between 2 positons a
         //Timeline is a series of tweens
-        var playerAnimationTimeline = scene.tweens.createTimeline();
+        this.playerAnimationTimeline = this.scene.tweens.createTimeline();
 
-        var player = new Person(scene,0,0,"person");
         var tweenBuilderConfig;
         //animate it moving from one node to another
-        for (i = 0; i < nodePositionArray.length; i++) {
+        for (let i = 0; i < nodePositionArray.length; i++) {
             tweenBuilderConfig = {
-                targets: player,
-                duration: 1000,
+                targets: this.player,
+                duration: this.timeToTravelBetweenCaves,
                 x : nodePositionArray[i][0],
                 y : nodePositionArray[i][1],
-                offset : "+=500m",
-                //when the fucntion stopps it will run the follow 
-                onComplete : this.updateTouchedNode,
-                onCompleteParams : [caveList[i]] 
+                offset : this.playerWaitTimeAtNode,
+                //when the function stops it will run this
+                onComplete : this.handleTweenEnd,
+                onCompleteParams : [this,nodePath[i]]
             };
-           
-            playerAnimationTimeline.add(tweenBuilderConfig);
+
+            this.playerAnimationTimeline.add(tweenBuilderConfig);
         }
 
-        //run all tween animations
-        playerAnimationTimeline.play();
     }
-    c//  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
-    //  Following this comes whatever you specify in the params array (in this case onRepeatParams)
-    updateTouchedNode(sprite, animation, cave) {
-       //change color
-            cave.tint = 0xff00ff;
+
+    play(){
+            this.playerAnimationTimeline.play();
+    }
+
+    updateTouchedCave(cave) {
+        //add a layer of color on top of image
+         cave.tint = 0xff00ff;
+    }
+    //  The first two callback arguments are always the sprite on which the animation is playing, and the animation itself.
+    //  Following this comes whatever you specify in the params array (in this case cave)
+    //animationObject has to be sent becuase it wll be called from another object and won't be able to access the parent animation (TravelAnimation)
+    handleTweenEnd(sprite, animation, travelAnimationObject, currentNode)
+	{
+    	if (currentNode == travelAnimationObject.nextNodeToTraverseTo)
+		{
+			travelAnimationObject.nodesToTraverse.splice(0,1);
+            travelAnimationObject.nextNodeToTraverseTo = travelAnimationObject.nodesToTraverse[0];
+
+            if (travelAnimationObject.stopOnNextTraversalNode)
+			{
+                travelAnimationObject.canContinue = false;
+            }
+        }
+        if(travelAnimationObject.canContinue)
+		{
+            travelAnimationObject.playerAnimationTimeline.resume();
+        }
+        else
+		{
+            travelAnimationObject.playerAnimationTimeline.pause();
+        }
+        travelAnimationObject.updateTouchedCave(currentNode.cave);
+    }
+
+    pauseOnNextNode() { this.canContinue = false; }
+
+    pauseOnNextNodeInTravesalPath()
+	{
+        console.log("pause");
+        this.stopOnNextTraversalNode = true;
+    }
+
+    resume()
+	{
+        console.log("continue");
+        this.stopOnNextTraversalNode = false;
+        this.canContinue = true;
+        this.playerAnimationTimeline.resume();
     }
 }
+
+//declare static variables
+TravelAnimation.BFSAnimation = 1;
+TravelAnimation.InorderAnimation = 2;
