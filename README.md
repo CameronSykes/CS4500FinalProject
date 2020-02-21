@@ -1,6 +1,18 @@
 # What is this
 
-+ This is an Interactive animation of Breadth First and Inorder traversal of a set of nodes. 
++ This is an Interactive animation of Breadth First Search and Inorder traversal of a set of nodes.
+
+### Breadth First Search
+
+![Breadth First Search ](BFS_gif.gif)
+
+### Inorder traversal
+
+![Inorder traversal](Inorder.gif)
+	
+
+### Pause functions
+![Inorder traversal](Pause and Unpause.gif	)
 
 
 # Dev Notes
