@@ -1,5 +1,12 @@
+# What is this
+
++ This is an Interactive animation of Breadth First and Inorder traversal of a set of nodes. 
+
+
+# Dev Notes
+
 ##  Running
- Thi program is writin in es6. It is a javascript verion writtien in 2015 it includes support for impots and exports
+ This program is writin in es6. It is a javascript verion writtien in 2015 it includes support for impots and exports
  
   Brwosers cannot use the import export modules in es6 unless specified by using `type="module"` in the html.
   
