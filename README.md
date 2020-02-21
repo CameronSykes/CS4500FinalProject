@@ -12,7 +12,7 @@
 	
 
 ### Pause functions
-![Inorder traversal](Pause and Unpause.gif	)
+![Pause and Unpause](Pause%20and%20Unpause.gif)
 
 
 # Dev Notes
